@@ -21,11 +21,15 @@ All records are Markdown files under `nenrin/` with YAML-like frontmatter that h
 
 See `examples/nenrin/` for a tiny sample ledger.
 
+See `docs/roadmap.md` for the current direction. The roadmap is intentionally evidence-led: Nenrin should evolve through observed use, not through a large feature checklist.
+
 ## 改善観察台帳
 
 Nenrin is best understood as an 改善観察台帳: it records why an agent-environment improvement was added, what behavior was expected, what happened later, and whether the improvement should be kept, removed, merged, narrowed, or moved.
 
 It intentionally avoids turning every improvement into a numeric score. The first job is to keep the retrospective loop visible.
+
+AI usability is a constraint from the beginning, not a future feature. Records should stay easy for coding agents to read, update, and summarize without needing a dashboard or external service.
 
 ## Core Workflow
 
@@ -33,6 +37,8 @@ It intentionally avoids turning every improvement into a numeric score. The firs
 2. Fill in the generated Markdown record with the change, reason, expected behavior, and review timing.
 3. After a related task, run `nenrin observe <name> --change <change-id>`.
 4. Use `nenrin metrics` and `nenrin debt` to find stale observing changes, overdue reviews, recurring failures, and cleanup candidates.
+
+Create records for durable changes to agent-facing behavior: instructions, skills, handoffs, roadmaps, release rules, QA gates, and recurring workflow guidance. Skip Nenrin records for tiny wording fixes, formatting-only edits, one-off task notes, or changes that do not affect future agent behavior.
 
 ## Commands
 
