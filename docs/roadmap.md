@@ -13,6 +13,8 @@ Nenrin should evolve through observed use. Do not add automation before the manu
 - Cleanup decisions matter as much as adding new guidance.
 - Habitat is a strong proving ground, but Nenrin should not depend on Habitat.
 
+For the broader product stance, see [Product Philosophy](philosophy.md).
+
 ## v0.1 - Minimal Ledger
 
 Goal: create change and observation records.

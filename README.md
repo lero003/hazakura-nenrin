@@ -23,6 +23,8 @@ See `examples/nenrin/` for a tiny sample ledger.
 
 See `docs/roadmap.md` for the current direction. The roadmap is intentionally evidence-led: Nenrin should evolve through observed use, not through a large feature checklist.
 
+See `docs/philosophy.md` for the early product stance behind Nenrin.
+
 ## 改善観察台帳
 
 Nenrin is best understood as an 改善観察台帳: it records why an agent-environment improvement was added, what behavior was expected, what happened later, and whether the improvement should be kept, removed, merged, narrowed, or moved.
@@ -30,6 +32,8 @@ Nenrin is best understood as an 改善観察台帳: it records why an agent-envi
 It intentionally avoids turning every improvement into a numeric score. The first job is to keep the retrospective loop visible.
 
 AI usability is a constraint from the beginning, not a future feature. Records should stay easy for coding agents to read, update, and summarize without needing a dashboard or external service.
+
+Nenrin is intentionally on the defensive side of AI-first development. Faster generation, broader automation, and more powerful agent execution will keep improving elsewhere; Nenrin focuses on keeping the agent working environment understandable, reviewable, and pruneable as that speed increases.
 
 ## Core Workflow
 
