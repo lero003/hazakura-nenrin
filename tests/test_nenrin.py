@@ -10,8 +10,9 @@ from pathlib import Path
 from nenrin.cli import main
 from nenrin.frontmatter import dump_frontmatter, parse_frontmatter
 from nenrin.records import (
-    impact_counts,
+    change_impact_counts,
     load_records,
+    observation_impact_counts,
     overdue_changes,
     recurring_failure_signals,
     status_counts,
@@ -65,8 +66,8 @@ class RecordTests(unittest.TestCase):
             records = load_records(root)
 
             self.assertEqual(status_counts(records)["observing"], 1)
-            self.assertEqual(impact_counts(records)["unknown"], 1)
-            self.assertEqual(impact_counts(records)["partially_effective"], 1)
+            self.assertEqual(change_impact_counts(records)["unknown"], 1)
+            self.assertEqual(observation_impact_counts(records)["partially_effective"], 1)
 
     def test_templates_are_not_records(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
@@ -142,6 +143,30 @@ class RecordTests(unittest.TestCase):
             records = load_records(root)
 
             self.assertEqual(recurring_failure_signals(records)["changelog check missed"], 2)
+
+    def test_recurring_failure_tags(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp) / "nenrin"
+            for index in range(2):
+                write_record(
+                    root / "observations" / f"2026-05-0{index + 1}-obs.md",
+                    {
+                        "type": "nenrin_observation",
+                        "id": f"obs-{index}",
+                        "date": f"2026-05-0{index + 1}",
+                        "related_changes": ["release"],
+                        "impact_judgment": "partially_effective",
+                        "failure_tags": ["changelog_consistency_missed"],
+                    },
+                    "# Observation\n",
+                )
+
+            records = load_records(root)
+
+            self.assertEqual(
+                recurring_failure_signals(records)["tag:changelog_consistency_missed"],
+                2,
+            )
 
 
 class CliTests(unittest.TestCase):

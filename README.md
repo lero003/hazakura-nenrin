@@ -21,6 +21,12 @@ All records are Markdown files under `nenrin/` with YAML-like frontmatter that h
 
 See `examples/nenrin/` for a tiny sample ledger.
 
+## 改善観察台帳
+
+Nenrin is best understood as an 改善観察台帳: it records why an agent-environment improvement was added, what behavior was expected, what happened later, and whether the improvement should be kept, removed, merged, narrowed, or moved.
+
+It intentionally avoids turning every improvement into a numeric score. The first job is to keep the retrospective loop visible.
+
 ## Core Workflow
 
 1. When you change an agent-facing artifact, run `nenrin change <name>`.
@@ -40,6 +46,25 @@ nenrin debt
 ```
 
 `nenrin change` and `nenrin observe` intentionally create editable Markdown templates instead of forcing a heavy questionnaire. The first version optimizes for Codex, Claude Code, Cursor, Windsurf, and similar tools that can fill in records directly.
+
+## Frontmatter
+
+Nenrin frontmatter supports a small YAML-like subset, not full YAML. It supports scalar values, nested mappings, and simple lists.
+
+Observation records may include optional `success_tags` and `failure_tags` to reduce wording drift in recurring signals:
+
+```md
+---
+type: nenrin_observation
+id: release-review
+failure_tags:
+  - changelog_consistency_missed
+success_tags:
+  - release_risk_classified
+---
+```
+
+Review records include `final_judgment`. A later CLI version should use review judgments to prompt updates to the related change's `status` and `impact`.
 
 ## Tests
 

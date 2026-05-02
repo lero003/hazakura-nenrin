@@ -63,13 +63,14 @@ def status_counts(records: list[Record]) -> Counter[str]:
     return Counter(str(record.metadata.get("status", "unknown")) for record in changes(records))
 
 
-def impact_counts(records: list[Record]) -> Counter[str]:
-    counter: Counter[str] = Counter()
-    for record in changes(records):
-        counter[str(record.metadata.get("impact", "unknown"))] += 1
-    for record in observations(records):
-        counter[str(record.metadata.get("impact_judgment", "unknown"))] += 1
-    return counter
+def change_impact_counts(records: list[Record]) -> Counter[str]:
+    return Counter(str(record.metadata.get("impact", "unknown")) for record in changes(records))
+
+
+def observation_impact_counts(records: list[Record]) -> Counter[str]:
+    return Counter(
+        str(record.metadata.get("impact_judgment", "unknown")) for record in observations(records)
+    )
 
 
 def observation_counts_by_change(records: list[Record]) -> Counter[str]:
@@ -120,6 +121,9 @@ def overdue_changes(records: list[Record], today: date | None = None) -> list[Ov
 def recurring_failure_signals(records: list[Record]) -> Counter[str]:
     counter: Counter[str] = Counter()
     for record in observations(records):
+        for tag in _as_list(record.metadata.get("failure_tags", [])):
+            counter[f"tag:{tag}"] += 1
+
         in_failure_section = False
         for raw_line in record.body.splitlines():
             line = raw_line.strip()
@@ -164,3 +168,11 @@ def _int_or_none(value: Any) -> int | None:
         return int(value)
     except (TypeError, ValueError):
         return None
+
+
+def _as_list(value: Any) -> list[Any]:
+    if value is None:
+        return []
+    if isinstance(value, list):
+        return value
+    return [value]

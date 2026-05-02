@@ -9,9 +9,10 @@ from pathlib import Path
 from . import __version__
 from .records import (
     VALID_IMPACTS,
+    change_impact_counts,
     cleanup_candidates,
-    impact_counts,
     load_records,
+    observation_impact_counts,
     observations,
     observation_counts_by_change,
     overdue_changes,
@@ -226,7 +227,8 @@ def cmd_debt(args: argparse.Namespace) -> int:
 
 def render_metrics(root: Path, records: list) -> str:
     statuses = status_counts(records)
-    impacts = impact_counts(records)
+    change_impacts = change_impact_counts(records)
+    observation_impacts = observation_impact_counts(records)
     overdue = overdue_changes(records)
     observed = observation_counts_by_change(records)
     recurring = recurring_failure_signals(records)
@@ -239,7 +241,8 @@ def render_metrics(root: Path, records: list) -> str:
     lines.append("")
 
     lines.extend(_counter_section("Status", statuses))
-    lines.extend(_counter_section("Impact", impacts))
+    lines.extend(_counter_section("Change Impact", change_impacts))
+    lines.extend(_counter_section("Observation Impact Judgment", observation_impacts))
 
     lines.append("## Review Overdue")
     lines.append("")
