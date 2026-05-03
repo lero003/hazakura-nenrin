@@ -144,6 +144,36 @@ class RecordTests(unittest.TestCase):
 
             self.assertEqual(recurring_failure_signals(records)["changelog check missed"], 2)
 
+    def test_recurring_failure_signals_ignore_none_placeholders(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp) / "nenrin"
+            placeholders = [
+                "None observed in this slice.",
+                "None in this task.",
+                "No failure signals observed yet.",
+            ]
+            for index, placeholder in enumerate(placeholders):
+                write_record(
+                    root / "observations" / f"2026-05-0{index + 1}-obs.md",
+                    {
+                        "type": "nenrin_observation",
+                        "id": f"obs-{index}",
+                        "date": f"2026-05-0{index + 1}",
+                        "related_changes": ["release"],
+                        "impact_judgment": "effective",
+                    },
+                    f"""# Observation
+
+## Failure Signals Observed
+
+- {placeholder}
+""",
+                )
+
+            records = load_records(root)
+
+            self.assertEqual(recurring_failure_signals(records), {})
+
     def test_recurring_failure_tags(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp) / "nenrin"

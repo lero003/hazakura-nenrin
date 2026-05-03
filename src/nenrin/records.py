@@ -11,6 +11,16 @@ from .frontmatter import parse_frontmatter
 
 VALID_IMPACTS = {"unknown", "effective", "partially_effective", "ineffective", "harmful"}
 
+_PLACEHOLDER_FAILURE_SIGNALS = {
+    "none",
+    "none observed",
+    "none observed in this slice",
+    "none in this task",
+    "no failure signals observed",
+    "no failure signals observed yet",
+    "tbd",
+}
+
 
 @dataclass(frozen=True)
 class Record:
@@ -132,7 +142,7 @@ def recurring_failure_signals(records: list[Record]) -> Counter[str]:
                 continue
             if in_failure_section and line.startswith("- "):
                 signal = line[2:].strip()
-                if signal and signal.upper() != "TBD":
+                if signal and not _is_placeholder_signal(signal):
                     counter[signal] += 1
     return Counter({key: value for key, value in counter.items() if value > 1})
 
@@ -176,3 +186,8 @@ def _as_list(value: Any) -> list[Any]:
     if isinstance(value, list):
         return value
     return [value]
+
+
+def _is_placeholder_signal(value: str) -> bool:
+    normalized = value.strip().lower().rstrip(".。")
+    return normalized in _PLACEHOLDER_FAILURE_SIGNALS
