@@ -11,6 +11,9 @@ Nenrin should evolve through observed use. Do not add automation before the manu
 - Frontmatter should stay simple enough for lightweight local parsing.
 - Observation and review matter more than numeric scoring.
 - Cleanup decisions matter as much as adding new guidance.
+- Nenrin should close, narrow, move, or remove improvements more readily than it creates new permanent guidance.
+- No-op is a valid automation outcome when there is no actionable signal.
+- Keep states small and put confidence in review evidence, not in more status values.
 - Habitat is a strong proving ground, but Nenrin should not depend on Habitat.
 
 For the broader product stance, see [Product Philosophy](philosophy.md).
@@ -44,6 +47,7 @@ Focus:
 - Keep `debt` quiet enough that it points to reviewable cleanup.
 - Support optional `success_tags` and `failure_tags` for recurring signals.
 - Provide a minimal rule that can be pasted into `AGENTS.md` or similar agent instructions.
+- Keep no-failure placeholders out of recurring debt while preserving weak evidence as `unknown` or `partially_effective`.
 
 Success means the ledger is used during real work without becoming a chore or a stale checklist.
 
@@ -67,6 +71,8 @@ Focus:
 - Improve `debt` cleanup candidates without making them noisy.
 
 Success means at least some improvements are pruned, narrowed, merged, or moved instead of only being added.
+
+Automation in this phase should act as a pruning pass, not a work generator. It should prioritize overdue review, recurring failure verification, active-record hygiene, evidence quality, and no-op when nothing needs to close.
 
 ## v0.4 - Briefing
 
@@ -163,6 +169,8 @@ Early self-observation should focus on:
 - Do agents leave `TBD` content behind?
 - Do old changes stay `observing` forever?
 - Do remove, merge, and narrow decisions actually happen?
+- Do automations leave the ledger unchanged when there is no actionable review, failure, or hygiene signal?
+- Are `effective` judgments backed by behavior evidence rather than by the fact that a record was created?
 
 If the answer is no, improve the workflow before adding more features.
 

@@ -35,6 +35,8 @@ AI usability is a constraint from the beginning, not a future feature. Records s
 
 Nenrin is intentionally on the defensive side of AI-first development. Faster generation, broader automation, and more powerful agent execution will keep improving elsewhere; Nenrin focuses on keeping the agent working environment understandable, reviewable, and pruneable as that speed increases.
 
+Nenrin is a pruning tool, not a log generator. A healthy ledger is not the one with the most records; it is the one where improvements can be reviewed, closed, narrowed, moved, or removed when evidence is weak. No actionable signal is also a valid outcome: do not create work just to prove the ledger is active.
+
 ## Core Workflow
 
 1. When you change an agent-facing artifact, run `nenrin change <name>`.
@@ -43,6 +45,8 @@ Nenrin is intentionally on the defensive side of AI-first development. Faster ge
 4. Use `nenrin metrics` and `nenrin debt` to find stale observing changes, overdue reviews, recurring failures, and cleanup candidates.
 
 Create records for durable changes to agent-facing behavior: instructions, skills, handoffs, roadmaps, release rules, QA gates, and recurring workflow guidance. Skip Nenrin records for tiny wording fixes, formatting-only edits, one-off task notes, or changes that do not affect future agent behavior.
+
+Treat `effective` as a behavior claim, not a feeling of progress. Use it when evidence shows a changed next command, a narrower cleanup choice, a safer review path, or a concrete reduction in recurring friction. If the evidence only says a record was read or written, keep the impact unknown or partially effective and write the uncertainty in the review note.
 
 ## Commands
 

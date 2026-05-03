@@ -93,6 +93,12 @@ Useful outcomes include:
 - move one-off context into a handoff
 - move recurring release checks into a checklist
 
+The healthiest ledger is not the one with the most records. It is the one where evidence lets the team close, narrow, move, or delete records without losing the reason behind the decision.
+
+If there is no actionable signal, doing nothing is a good result. Nenrin should not create work merely to prove that observation is happening.
+
+Impact states should stay small. Confidence belongs in the evidence: what next command changed, what cleanup choice narrowed, what recurring failure disappeared, or what uncertainty remains.
+
 ## Loose Until Proven
 
 The project should stay loose for now.
