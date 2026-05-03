@@ -9,6 +9,7 @@ from pathlib import Path
 from . import __version__
 from .records import (
     VALID_IMPACTS,
+    changes,
     change_impact_counts,
     cleanup_candidates,
     load_records,
@@ -306,6 +307,11 @@ def update_index(root: Path) -> None:
     records = load_records(root)
     statuses = status_counts(records)
     overdue = overdue_changes(records)
+    active_changes = [
+        record
+        for record in changes(records)
+        if record.metadata.get("status") in {"observing", "ready_for_review"}
+    ]
 
     lines = ["# Nenrin Index", "", "## Active Summary", ""]
     if statuses:
@@ -314,6 +320,13 @@ def update_index(root: Path) -> None:
     else:
         lines.append("- No change records yet.")
     lines.append("")
+    if active_changes:
+        lines.append("## Active Changes")
+        lines.append("")
+        for record in active_changes:
+            path = record.path.relative_to(root).as_posix()
+            lines.append(f"- `{record.id}` - [{path}]({path})")
+        lines.append("")
     lines.append("## Review Due")
     lines.append("")
     if overdue:

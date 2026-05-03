@@ -196,6 +196,9 @@ class CliTests(unittest.TestCase):
 
             self.assertIn("# Nenrin Metrics", output.getvalue())
             self.assertTrue((root / "metrics.md").exists())
+            index_text = (root / "index.md").read_text(encoding="utf-8")
+            self.assertIn("## Active Changes", index_text)
+            self.assertIn("- `release-review` - [changes/", index_text)
 
     def test_debt_runs_on_empty_ledger(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
