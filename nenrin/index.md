@@ -2,7 +2,7 @@
 
 ## Active Summary
 
-- observing: 10
+- observing: 11
 
 ## Active Changes
 
@@ -16,6 +16,7 @@
 - `v0-3-x-stabilization` - [changes/2026-05-04-v0-3-x-stabilization.md](changes/2026-05-04-v0-3-x-stabilization.md)
 - `v0-4-remote-agent-workflow` - [changes/2026-05-04-v0-4-remote-agent-workflow.md](changes/2026-05-04-v0-4-remote-agent-workflow.md)
 - `v0-5-compaction-summary-decisions` - [changes/2026-05-04-v0-5-compaction-summary-decisions.md](changes/2026-05-04-v0-5-compaction-summary-decisions.md)
+- `v0-6-cloudflare-backend-abstraction` - [changes/2026-05-04-v0-6-cloudflare-backend-abstraction.md](changes/2026-05-04-v0-6-cloudflare-backend-abstraction.md)
 
 ## Review Due
 
