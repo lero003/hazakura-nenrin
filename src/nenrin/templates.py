@@ -201,9 +201,9 @@ Nenrin frontmatter supports a small YAML-like subset: scalar values, nested mapp
 
 Observation records may include optional `success_tags` and `failure_tags` to reduce wording drift when tracking recurring signals.
 
-## Future Review Flow
+## Review Flow
 
-Review records include `final_judgment`. A later CLI version should use that field to prompt updates to the related change's `status` and `impact`.
+Review records include `final_judgment`. Run `nenrin review --apply` to propagate completed review judgments back to the related change's `status` and `impact`.
 """
 
 

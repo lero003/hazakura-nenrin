@@ -42,7 +42,8 @@ For an existing ledger, read:
 
 1. `nenrin/index.md`
 2. active records in `nenrin/changes/`
-3. `nenrin/metrics.md` or `nenrin debt` when deciding what to review
+3. Run `nenrin brief` to get active observation context in one screen
+4. Run `nenrin metrics` and `nenrin debt` when deciding what to review
 
 Keep observations short and evidence-oriented. Do not turn the ledger into a transcript archive.
 
@@ -57,6 +58,12 @@ Use `effective` only when the evidence shows behavior changed, such as:
 - the cleanup choice narrowed from adding guidance to reviewing, pruning, or moving it
 - a recurring failure became a concrete fix or review decision
 
-Reading a record, creating a record, or noticing a possible issue is not enough by itself. If the signal is weak, leave the change `unknown`, mark the observation `unknown` or `partially_effective`, and say what must be watched next.
+Reading a record, creating a record, or noticing a possible issue is not enough by itself. If the signal is weak, leave the change impact as `unknown`, mark the observation `impact_judgment` as `unknown` or `partially_effective`, and say what must be watched next.
 
 No-failure placeholders are not debt. They also are not proof of success. If there is no failure but no behavior evidence either, keep observing rather than upgrading the judgment.
+
+## Review Commands
+
+- `nenrin review` lists overdue changes.
+- `nenrin review --create` generates review templates for each overdue change.
+- `nenrin review --apply` reads completed reviews and updates the related change's `status` and `impact` based on `final_judgment` (e.g., `keep` → `reviewed`/`effective`, `remove` → `archived`/`ineffective`).

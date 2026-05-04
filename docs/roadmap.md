@@ -66,18 +66,18 @@ Focus:
 
 Success means the ledger is used during real work without becoming a chore or a stale checklist.
 
-## v0.2.x - Foundation Hardening
+## v0.2.x - Foundation Hardening ~~(done)~~
 
 Goal: remove hidden correctness gaps before review, briefing, and diff automation depend on them.
 
 Focus:
 
-- Parse `config.yaml` and use `review_defaults` for `nenrin change`.
-- Treat `tracked_files` as the future contract for `nenrin diff`, even before diff awareness ships.
-- Fix frontmatter parser edge cases or adopt a small maintained YAML parser if the dependency cost stays low.
-- Add cross-record validation so `nenrin observe --change <id>` does not silently create orphan observations.
-- Broaden tests around frontmatter edge cases, `cmd_review --create`, `cleanup_candidates()`, `unique_record_path()`, and `slugify()`.
-- Keep generated outputs distinct: `index.md` for navigation, `metrics.md` for aggregate state, and future `brief` output for next-session context.
+- ~~Parse `config.yaml` and use `review_defaults` for `nenrin change`.~~
+- ~~Treat `tracked_files` as the future contract for `nenrin diff`, even before diff awareness ships.~~
+- ~~Fix frontmatter parser edge cases or adopt a small maintained YAML parser if the dependency cost stays low.~~
+- ~~Add cross-record validation so `nenrin observe --change <id>` does not silently create orphan observations.~~
+- ~~Broaden tests around frontmatter edge cases, `cmd_review --create`, `cleanup_candidates()`, `unique_record_path()`, and `slugify()`.~~
+- ~~Keep generated outputs distinct: `index.md` for navigation, `metrics.md` for aggregate state, and future `brief` output for next-session context.~~
 
 Success means generated config is not misleading, record references are checked, parser behavior is covered by tests, and later automation has a reliable base.
 
@@ -89,16 +89,8 @@ Focus:
 
 - Make review records useful in real operation.
 - Turn long-lived `observing` and `unknown` records into an explicit review queue instead of treating them as success.
-- Clarify `final_judgment` values:
-  - `keep`
-  - `remove`
-  - `merge`
-  - `narrow`
-  - `move_to_skill`
-  - `move_to_handoff`
-  - `move_to_checklist`
-  - `keep_observing`
-- Add a path from review decisions back to change `status` and `impact`.
+- ~~Clarify `final_judgment` values: `keep`, `remove`, `merge`, `narrow`, `move_to_skill`, `move_to_handoff`, `move_to_checklist`, `keep_observing`.~~
+- ~~Add a path from review decisions back to change `status` and `impact`.~~ (`nenrin review --apply`)
 - Improve `debt` cleanup candidates without making them noisy; use `impact` and review evidence to avoid generic all-option advice.
 - Prefer reviewing a small number of lived records over adding more fields or states.
 
@@ -106,17 +98,17 @@ Success means at least some improvements are pruned, narrowed, merged, or moved 
 
 Automation in this phase should act as a pruning pass, not a work generator. It should prioritize overdue review, recurring failure verification, active-record hygiene, evidence quality, and no-op when nothing needs to close.
 
-## v0.4 - Briefing
+## v0.4 - Briefing ~~(done)~~
 
 Goal: summarize the active observation context for the next agent session.
 
-Possible command:
+Command:
 
 ```bash
 nenrin brief
 ```
 
-Expected shape:
+Output shape (active changes with Watch/Risk signals extracted from record body):
 
 ```md
 # Nenrin Brief
@@ -138,8 +130,6 @@ Expected shape:
 
 Success means an agent can understand what to watch without reading every record.
 
-Before adding `brief`, keep its responsibility separate from generated `index.md` and `metrics.md`: the brief should orient a new agent session, not become another metrics report.
-
 ## v0.5 - Diff Awareness
 
 Goal: detect important agent-facing changes without automatically turning every diff into a record.
@@ -159,8 +149,6 @@ Focus:
 - Treat Habitat findings as useful input when they show a mismatch between written instructions and repository reality.
 
 Success means record omissions decrease without forcing tiny edits into the ledger.
-
-This phase depends on the v0.2.x config-loading work. If `config.yaml` is still only generated and not read, do not start diff awareness.
 
 ## v0.6 - Assisted Reflection
 

@@ -52,18 +52,24 @@ Treat `effective` as a behavior claim, not a feeling of progress. Use it when ev
 
 ```bash
 nenrin init
-nenrin change <name>
-nenrin observe <name> --change <change-id>
-nenrin review
-nenrin review --apply
+nenrin change <name> [--changed <text>] [--reason <text>] [--expected <text>]
+                     [--review-days <n>] [--review-tasks <n>] [--file <path> ...]
+nenrin observe <name> --change <change-id> [--impact <value>]
+nenrin review [--create] [--apply]
 nenrin brief
-nenrin metrics
+nenrin metrics [--no-write]
 nenrin debt
 ```
 
+All commands accept `--root <path>` to point to a non-default ledger directory (default: `./nenrin`).
+
 `nenrin change` and `nenrin observe` intentionally create editable Markdown templates instead of forcing a heavy questionnaire. The first version optimizes for Codex, Claude Code, Cursor, Windsurf, and similar tools that can fill in records directly.
 
+`nenrin review` lists overdue changes. `--create` generates review templates for each overdue change. `--apply` propagates completed review judgments to related change records.
+
 `nenrin brief` prints the active observation context for the next agent session (Watch/Risk signals, review deadlines, recurring failures) without requiring the agent to read every record.
+
+`nenrin metrics --no-write` prints metrics without updating `nenrin/metrics.md` or `nenrin/index.md`.
 
 ## Configuration
 
@@ -101,7 +107,7 @@ success_tags:
 ---
 ```
 
-Review records include `final_judgment`. A later CLI version should use review judgments to prompt updates to the related change's `status` and `impact`.
+Review records include `final_judgment`. Use `nenrin review --apply` to propagate completed review judgments back to the related change's `status` and `impact`.
 
 ## Tests
 
