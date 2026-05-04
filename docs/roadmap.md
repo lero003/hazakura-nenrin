@@ -14,9 +14,22 @@ Nenrin should evolve through observed use. Do not add automation before the manu
 - Nenrin should close, narrow, move, or remove improvements more readily than it creates new permanent guidance.
 - No-op is a valid automation outcome when there is no actionable signal.
 - Keep states small and put confidence in review evidence, not in more status values.
+- `AGENTS.md`, roadmap, and development docs remain the operational source of truth for current work; Nenrin should test whether changes to those sources earned their place.
 - Habitat is a strong proving ground, but Nenrin should not depend on Habitat.
 
 For the broader product stance, see [Product Philosophy](philosophy.md).
+
+## Tool Roles
+
+Current self-use suggests this working split:
+
+| Tool | Primary role | Near-term test |
+| --- | --- | --- |
+| `AGENTS.md` and project docs | Current rules, direction, and concrete workflow | Does the next agent know what to do now? |
+| Habitat | Pre-work repository reality check | Did it surface current project facts or instruction drift that changed the next command? |
+| Nenrin | Retrospective pruning ledger | Did prior records make a later keep, remove, merge, narrow, or move decision easier? |
+
+Nenrin should not try to beat `AGENTS.md` at immediate instruction. Its value should be judged after several tasks, when `observing` and `unknown` records can be reviewed against behavior evidence.
 
 ## v0.1 - Minimal Ledger
 
@@ -58,6 +71,7 @@ Goal: connect observations to keep, remove, merge, narrow, and move decisions.
 Focus:
 
 - Make review records useful in real operation.
+- Turn long-lived `observing` and `unknown` records into an explicit review queue instead of treating them as success.
 - Clarify `final_judgment` values:
   - `keep`
   - `remove`
@@ -69,6 +83,7 @@ Focus:
   - `keep_observing`
 - Add a path from review decisions back to change `status` and `impact`.
 - Improve `debt` cleanup candidates without making them noisy.
+- Prefer reviewing a small number of lived records over adding more fields or states.
 
 Success means at least some improvements are pruned, narrowed, merged, or moved instead of only being added.
 
@@ -122,6 +137,7 @@ Focus:
 - Detect changed `AGENTS.md`, `SKILL.md`, handoff, roadmap, release, docs, or QA files.
 - Warn when no related Nenrin change appears to exist.
 - Suggest record creation without creating records automatically.
+- Treat Habitat findings as useful input when they show a mismatch between written instructions and repository reality.
 
 Success means record omissions decrease without forcing tiny edits into the ledger.
 
@@ -168,6 +184,7 @@ Early self-observation should focus on:
 - Are records growing too quickly?
 - Do agents leave `TBD` content behind?
 - Do old changes stay `observing` forever?
+- Do `unknown` impacts become review decisions after enough related work?
 - Do remove, merge, and narrow decisions actually happen?
 - Do automations leave the ledger unchanged when there is no actionable review, failure, or hygiene signal?
 - Are `effective` judgments backed by behavior evidence rather than by the fact that a record was created?

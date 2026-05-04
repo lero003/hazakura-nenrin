@@ -2,17 +2,17 @@
 
 ## Summary
 
-- Change records: 4
+- Change records: 6
 - Observation records: 1
 - Review overdue: 0
 
 ## Status
 
-- observing: 4
+- observing: 6
 
 ## Change Impact
 
-- unknown: 4
+- unknown: 6
 
 ## Observation Impact Judgment
 

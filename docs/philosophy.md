@@ -27,7 +27,7 @@ The bet is that faster agent work makes defensive infrastructure more important,
 
 Hazakura Habitat and Hazakura Nenrin are separate products, but they fit together naturally.
 
-Habitat is a preflight tool. It gives an AI coding agent short, advisory context before work starts, especially around safer command choices.
+Habitat is a preflight tool. It gives an AI coding agent short, advisory context before work starts, especially around safer command choices. Its strongest role is not repeating `AGENTS.md`; it is checking the current repository shape so an agent can notice when written guidance and real project signals point in different directions.
 
 Nenrin is a retrospective ledger. It records changes to the agent-facing working environment and asks later whether those changes helped, should be kept, should be narrowed, or should be removed.
 
@@ -37,6 +37,8 @@ In shorthand:
 - Nenrin: after changes, make the working environment less likely to accumulate improvement debt.
 
 This pairing may become a useful base layer for an autonomous improvement loop: preflight context, real work, observation, pruning, then better preflight context next time.
+
+The current source-of-truth order is intentionally simple: `AGENTS.md`, roadmap, and development docs tell the agent what to do now; Habitat checks current facts before action; Nenrin later asks whether those guidance changes should be kept, narrowed, moved, or removed.
 
 ## Beyond Skills Alone
 
