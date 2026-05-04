@@ -7,7 +7,7 @@ from datetime import date
 from pathlib import Path
 
 from . import __version__
-from .frontmatter import load_config
+from .frontmatter import dump_frontmatter, load_config, parse_frontmatter
 from .records import (
     VALID_IMPACTS,
     changes,
@@ -77,6 +77,7 @@ def build_parser() -> argparse.ArgumentParser:
 
     review_parser = subparsers.add_parser("review", help="Show overdue changes and create review templates.")
     review_parser.add_argument("--create", action="store_true", help="Create review templates for overdue changes.")
+    review_parser.add_argument("--apply", action="store_true", help="Apply completed review judgments to related change records.")
     review_parser.set_defaults(func=cmd_review)
 
     metrics_parser = subparsers.add_parser("metrics", help="Print metrics and update nenrin/metrics.md.")
@@ -85,6 +86,9 @@ def build_parser() -> argparse.ArgumentParser:
 
     debt_parser = subparsers.add_parser("debt", help="Print improvement debt candidates.")
     debt_parser.set_defaults(func=cmd_debt)
+
+    brief_parser = subparsers.add_parser("brief", help="Print active observation context for the next agent session.")
+    brief_parser.set_defaults(func=cmd_brief)
 
     return parser
 
@@ -185,6 +189,10 @@ def cmd_observe(args: argparse.Namespace) -> int:
 def cmd_review(args: argparse.Namespace) -> int:
     root = Path(args.root)
     ensure_initialized(root)
+
+    if args.apply:
+        return _apply_reviews(root)
+
     records = load_records(root)
     overdue = overdue_changes(records)
 
@@ -312,6 +320,120 @@ def render_debt(records: list) -> str:
         lines.append("- None")
     lines.append("")
     return "\n".join(lines)
+
+
+_REVIEW_JUDGMENT_MAP = {
+    "keep": {"status": "reviewed", "impact": "effective"},
+    "remove": {"status": "archived", "impact": "ineffective"},
+    "merge": {"status": "archived", "impact": "partially_effective"},
+    "narrow": {"status": "reviewed", "impact": "partially_effective"},
+    "move_to_skill": {"status": "archived", "impact": "effective"},
+    "move_to_handoff": {"status": "archived", "impact": "effective"},
+    "move_to_checklist": {"status": "archived", "impact": "effective"},
+}
+
+
+def _apply_reviews(root: Path) -> int:
+    records = load_records(root)
+    applied = 0
+
+    for review in records:
+        if review.type != "nenrin_review":
+            continue
+        judgment = str(review.metadata.get("final_judgment", ""))
+        if judgment == "keep_observing" or judgment not in _REVIEW_JUDGMENT_MAP:
+            continue
+
+        mapping = _REVIEW_JUDGMENT_MAP[judgment]
+        related_change_id = str(review.metadata.get("related_change", ""))
+        change_matches = [r for r in records if r.type == "nenrin_change" and r.id == related_change_id]
+
+        if not change_matches:
+            print(f"Warning: change '{related_change_id}' not found for review '{review.id}'.", file=sys.stderr)
+            continue
+
+        change = change_matches[0]
+        text = change.path.read_text(encoding="utf-8")
+        metadata, body = parse_frontmatter(text)
+        metadata["status"] = mapping["status"]
+        metadata["impact"] = mapping["impact"]
+        change.path.write_text(dump_frontmatter(metadata, body), encoding="utf-8")
+        print(f"{judgment} → {related_change_id} (status={mapping['status']}, impact={mapping['impact']})")
+        applied += 1
+
+    if applied:
+        update_index(root)
+    else:
+        print("No review judgments to apply.")
+    return 0
+
+
+def cmd_brief(args: argparse.Namespace) -> int:
+    root = Path(args.root)
+    ensure_initialized(root)
+    records = load_records(root)
+    lines = render_brief(root, records)
+    print(lines.rstrip())
+    return 0
+
+
+def render_brief(root: Path, records: list) -> str:
+    active_changes = [
+        r for r in changes(records)
+        if r.metadata.get("status") in {"observing", "ready_for_review"}
+    ]
+    overdue = overdue_changes(records)
+    recurring = recurring_failure_signals(records)
+
+    lines = ["# Nenrin Brief", ""]
+    lines.append("## Active Observations")
+    lines.append("")
+    if active_changes:
+        for change in active_changes:
+            lines.append(f"- {change.id}")
+            watch = _extract_body_item(change.body, "Expected Behavior")
+            if watch:
+                lines.append(f"  - Watch: {watch}")
+            risk = _extract_body_item(change.body, "Failure Signals")
+            if risk:
+                lines.append(f"  - Risk: {risk}")
+    else:
+        lines.append("- None")
+    lines.append("")
+
+    lines.append("## Review Due")
+    lines.append("")
+    if overdue:
+        for item in overdue:
+            lines.append(f"- {item.change.id}")
+    else:
+        lines.append("- None")
+    lines.append("")
+
+    lines.append("## Recurring Failures")
+    lines.append("")
+    if recurring:
+        for signal, count in recurring.most_common():
+            lines.append(f"- {signal} ({count}x)")
+    else:
+        lines.append("- None")
+    lines.append("")
+
+    return "\n".join(lines)
+
+
+def _extract_body_item(body: str, section_name: str) -> str:
+    in_section = False
+    for line in body.splitlines():
+        stripped = line.strip()
+        if stripped.startswith("## "):
+            in_section = section_name.lower() in stripped.lower()
+            continue
+        if in_section and stripped.startswith("- "):
+            item = stripped[2:].strip()
+            if item.lower() not in {"tbd", ""}:
+                return item
+    return ""
 
 
 def update_index(root: Path) -> None:

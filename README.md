@@ -55,17 +55,32 @@ nenrin init
 nenrin change <name>
 nenrin observe <name> --change <change-id>
 nenrin review
+nenrin review --apply
+nenrin brief
 nenrin metrics
 nenrin debt
 ```
 
 `nenrin change` and `nenrin observe` intentionally create editable Markdown templates instead of forcing a heavy questionnaire. The first version optimizes for Codex, Claude Code, Cursor, Windsurf, and similar tools that can fill in records directly.
 
+`nenrin brief` prints the active observation context for the next agent session (Watch/Risk signals, review deadlines, recurring failures) without requiring the agent to read every record.
+
 ## Configuration
 
 `nenrin init` creates `nenrin/config.yaml` with defaults. The `review_defaults.tasks` and `review_defaults.days` values are used as fallback defaults for `nenrin change` when `--review-tasks` and `--review-days` are not specified on the command line.
 
 `nenrin observe --change <id>` warns when a referenced change ID does not exist in the ledger, helping catch orphan observations before they accumulate.
+
+`nenrin review --apply` reads completed review records and updates the related change's `status` and `impact` based on the `final_judgment`:
+
+| Judgment | Change status | Change impact |
+|----------|--------------|---------------|
+| `keep` | `reviewed` | `effective` |
+| `remove` | `archived` | `ineffective` |
+| `merge` | `archived` | `partially_effective` |
+| `narrow` | `reviewed` | `partially_effective` |
+| `move_to_*` | `archived` | `effective` |
+| `keep_observing` | *no change* | *no change* |
 
 The `tracked_files` list in `config.yaml` defines the file patterns that future diff awareness (v0.5) will watch for agent-facing changes.
 

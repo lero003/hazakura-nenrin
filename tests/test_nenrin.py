@@ -394,6 +394,76 @@ class CliTests(unittest.TestCase):
             self.assertIn("tasks: 10", content)
             self.assertIn("days: 30", content)
 
+    def test_brief_runs_on_empty_ledger(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp) / "nenrin"
+
+            self.assertEqual(main(["--root", str(root), "init"]), 0)
+            output = io.StringIO()
+            with redirect_stdout(output):
+                self.assertEqual(main(["--root", str(root), "brief"]), 0)
+
+            self.assertIn("# Nenrin Brief", output.getvalue())
+            self.assertIn("## Active Observations", output.getvalue())
+
+    def test_brief_shows_active_observations_and_review_due(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp) / "nenrin"
+
+            self.assertEqual(main(["--root", str(root), "init"]), 0)
+            main(["--root", str(root), "change", "Brief Test", "--review-days", "1", "--review-tasks", "1"])
+            change_files = sorted((root / "changes").glob("*.md"))
+            change_text = change_files[0].read_text(encoding="utf-8")
+            change_id_start = change_text.index("id: ") + 4
+            change_id_end = change_text.index("\n", change_id_start)
+            change_id = change_text[change_id_start:change_id_end].strip()
+
+            main(["--root", str(root), "observe", "Brief Obs", "--change", change_id])
+
+            output = io.StringIO()
+            with redirect_stdout(output):
+                self.assertEqual(main(["--root", str(root), "brief"]), 0)
+
+            self.assertIn(change_id, output.getvalue())
+
+    def test_review_apply_updates_change_status_and_impact(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp) / "nenrin"
+
+            self.assertEqual(main(["--root", str(root), "init"]), 0)
+            main(["--root", str(root), "change", "ApplyTest", "--review-days", "1", "--review-tasks", "1"])
+            change_files = sorted((root / "changes").glob("*.md"))
+            change_text = change_files[0].read_text(encoding="utf-8")
+            change_id_start = change_text.index("id: ") + 4
+            change_id_end = change_text.index("\n", change_id_start)
+            change_id = change_text[change_id_start:change_id_end].strip()
+
+            main(["--root", str(root), "observe", "App Obs", "--change", change_id])
+
+            # Create a review template
+            main(["--root", str(root), "review", "--create"])
+
+            # Fill in the review with a final judgment
+            review_files = sorted((root / "reviews").glob("*.md"))
+            self.assertEqual(len(review_files), 1)
+            review_text = review_files[0].read_text(encoding="utf-8")
+            review_text = review_text.replace("keep_observing", "keep")
+            review_files[0].write_text(review_text, encoding="utf-8")
+
+            # Apply
+            output = io.StringIO()
+            with redirect_stdout(output):
+                self.assertEqual(main(["--root", str(root), "review", "--apply"]), 0)
+
+            self.assertIn("keep → applytest", output.getvalue())
+            self.assertIn("status=reviewed", output.getvalue())
+            self.assertIn("impact=effective", output.getvalue())
+
+            # Verify the change record was updated
+            updated_text = change_files[0].read_text(encoding="utf-8")
+            self.assertIn("status: reviewed", updated_text)
+            self.assertIn("impact: effective", updated_text)
+
 
 def write_record(path: Path, metadata: dict, body: str) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
