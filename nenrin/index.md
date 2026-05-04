@@ -2,7 +2,7 @@
 
 ## Active Summary
 
-- observing: 9
+- observing: 10
 
 ## Active Changes
 
@@ -15,6 +15,7 @@
 - `roadmap-tool-role-boundaries` - [changes/2026-05-04-roadmap-tool-role-boundaries.md](changes/2026-05-04-roadmap-tool-role-boundaries.md)
 - `v0-3-x-stabilization` - [changes/2026-05-04-v0-3-x-stabilization.md](changes/2026-05-04-v0-3-x-stabilization.md)
 - `v0-4-remote-agent-workflow` - [changes/2026-05-04-v0-4-remote-agent-workflow.md](changes/2026-05-04-v0-4-remote-agent-workflow.md)
+- `v0-5-compaction-summary-decisions` - [changes/2026-05-04-v0-5-compaction-summary-decisions.md](changes/2026-05-04-v0-5-compaction-summary-decisions.md)
 
 ## Review Due
 
