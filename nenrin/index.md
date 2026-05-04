@@ -2,7 +2,7 @@
 
 ## Active Summary
 
-- observing: 11
+- observing: 12
 
 ## Active Changes
 
@@ -17,6 +17,7 @@
 - `v0-4-remote-agent-workflow` - [changes/2026-05-04-v0-4-remote-agent-workflow.md](changes/2026-05-04-v0-4-remote-agent-workflow.md)
 - `v0-5-compaction-summary-decisions` - [changes/2026-05-04-v0-5-compaction-summary-decisions.md](changes/2026-05-04-v0-5-compaction-summary-decisions.md)
 - `v0-6-cloudflare-backend-abstraction` - [changes/2026-05-04-v0-6-cloudflare-backend-abstraction.md](changes/2026-05-04-v0-6-cloudflare-backend-abstraction.md)
+- `roadmap-foundation-hardening` - [changes/2026-05-05-roadmap-foundation-hardening.md](changes/2026-05-05-roadmap-foundation-hardening.md)
 
 ## Review Due
 

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
+from pathlib import Path
 from typing import Any
 
 
@@ -74,10 +75,12 @@ def _parse_mapping(lines: list[str]) -> dict[str, Any]:
 
 
 def _parse_scalar(value: str) -> Any:
-    if value in {"[]", ""}:
+    if value == "[]":
         return []
-    if value in {"{}", ""}:
+    if value == "{}":
         return {}
+    if value == "":
+        return None
     if value.lower() == "true":
         return True
     if value.lower() == "false":
@@ -128,3 +131,11 @@ def _format_scalar(value: Any) -> str:
     if any(char in text for char in [":", "#", "[", "]", "{", "}", ","]):
         return '"' + text.replace('"', '\\"') + '"'
     return text
+
+
+def load_config(path: Path) -> dict[str, Any]:
+    """Parse a YAML-like config file without frontmatter delimiters."""
+    if not path.exists():
+        return {}
+    lines = path.read_text(encoding="utf-8").splitlines()
+    return _parse_mapping(lines)

@@ -7,6 +7,7 @@ impact: unknown
 related_files:
   - docs/roadmap.md
   - docs/philosophy.md
+  - docs/agent-usage.md
   - ../hazakura_Habitat/README.md
   - ../hazakura_Habitat/docs/roadmap.md
   - ../hazakura_Habitat/docs/product_direction.md
@@ -24,7 +25,7 @@ review_after:
 
 - Clarified that `AGENTS.md`, roadmap, and development docs remain the immediate operational source of truth.
 - Clarified that Habitat should surface current repository facts and instruction drift instead of repeating project instructions.
-- Clarified that Nenrin should be judged by later review and pruning decisions, not by record creation alone.
+- Clarified that Nenrin should be judged by later review and pruning decisions, not by record creation alone or duplicate version history.
 - Shifted Habitat `v0.5` language from generic evidence normalization toward evidence and instruction alignment.
 
 ## Reason
@@ -36,6 +37,7 @@ DeepSeek and Chika feedback both showed that Habitat and Nenrin are weak if judg
 - Future roadmap work treats `AGENTS.md` as the main immediate-work guide.
 - Habitat planning prioritizes command-changing repository facts, mismatches, and instruction drift.
 - Nenrin planning prioritizes review of `observing` and `unknown` records before adding broader automation.
+- Agents skip Nenrin records when `AGENTS.md`, changelogs, or roadmaps already carry the history and there is no future behavior to observe.
 - Agents do not claim Habitat or Nenrin are valuable merely because they produced output.
 
 ## Review After
@@ -53,6 +55,7 @@ DeepSeek and Chika feedback both showed that Habitat and Nenrin are weak if judg
 
 - Habitat output remains mostly a duplicate of written project instructions.
 - Nenrin records accumulate without later review decisions.
+- Nenrin duplicates `AGENTS.md` version history without producing later keep, remove, merge, narrow, or move decisions.
 - Roadmap work adds new automation before evidence shows the review loop or instruction-drift check helps.
 
 ## Result

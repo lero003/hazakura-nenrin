@@ -9,6 +9,7 @@ Nenrin should evolve through observed use. Do not add automation before the manu
 - AI usability is a starting constraint, not a later feature.
 - Markdown records should remain readable by humans and coding agents.
 - Frontmatter should stay simple enough for lightweight local parsing.
+- Generated config should either affect runtime behavior or be clearly documented as advisory.
 - Observation and review matter more than numeric scoring.
 - Cleanup decisions matter as much as adding new guidance.
 - Nenrin should close, narrow, move, or remove improvements more readily than it creates new permanent guidance.
@@ -29,7 +30,7 @@ Current self-use suggests this working split:
 | Habitat | Pre-work repository reality check | Did it surface current project facts or instruction drift that changed the next command? |
 | Nenrin | Retrospective pruning ledger | Did prior records make a later keep, remove, merge, narrow, or move decision easier? |
 
-Nenrin should not try to beat `AGENTS.md` at immediate instruction. Its value should be judged after several tasks, when `observing` and `unknown` records can be reviewed against behavior evidence.
+Nenrin should not try to beat `AGENTS.md` at immediate instruction or become a second version history. Its value should be judged after several tasks, when `observing` and `unknown` records can be reviewed against behavior evidence and pruned if `AGENTS.md` already carries the durable context well enough.
 
 ## v0.1 - Minimal Ledger
 
@@ -56,13 +57,29 @@ Focus:
 
 - Keep change and observation templates short enough to fill naturally.
 - Clarify when to create a record and when not to.
+- Avoid duplicating version history that already belongs in `AGENTS.md`, changelogs, or roadmaps; record the expected future behavior and review trigger instead.
 - Keep `metrics` useful as an observation summary, not a scoring system.
 - Keep `debt` quiet enough that it points to reviewable cleanup.
-- Support optional `success_tags` and `failure_tags` for recurring signals.
+- Keep optional `success_tags` and `failure_tags` useful for recurring signals.
 - Provide a minimal rule that can be pasted into `AGENTS.md` or similar agent instructions.
 - Keep no-failure placeholders out of recurring debt while preserving weak evidence as `unknown` or `partially_effective`.
 
 Success means the ledger is used during real work without becoming a chore or a stale checklist.
+
+## v0.2.x - Foundation Hardening
+
+Goal: remove hidden correctness gaps before review, briefing, and diff automation depend on them.
+
+Focus:
+
+- Parse `config.yaml` and use `review_defaults` for `nenrin change`.
+- Treat `tracked_files` as the future contract for `nenrin diff`, even before diff awareness ships.
+- Fix frontmatter parser edge cases or adopt a small maintained YAML parser if the dependency cost stays low.
+- Add cross-record validation so `nenrin observe --change <id>` does not silently create orphan observations.
+- Broaden tests around frontmatter edge cases, `cmd_review --create`, `cleanup_candidates()`, `unique_record_path()`, and `slugify()`.
+- Keep generated outputs distinct: `index.md` for navigation, `metrics.md` for aggregate state, and future `brief` output for next-session context.
+
+Success means generated config is not misleading, record references are checked, parser behavior is covered by tests, and later automation has a reliable base.
 
 ## v0.3 - Review and Pruning
 
@@ -82,7 +99,7 @@ Focus:
   - `move_to_checklist`
   - `keep_observing`
 - Add a path from review decisions back to change `status` and `impact`.
-- Improve `debt` cleanup candidates without making them noisy.
+- Improve `debt` cleanup candidates without making them noisy; use `impact` and review evidence to avoid generic all-option advice.
 - Prefer reviewing a small number of lived records over adding more fields or states.
 
 Success means at least some improvements are pruned, narrowed, merged, or moved instead of only being added.
@@ -121,6 +138,8 @@ Expected shape:
 
 Success means an agent can understand what to watch without reading every record.
 
+Before adding `brief`, keep its responsibility separate from generated `index.md` and `metrics.md`: the brief should orient a new agent session, not become another metrics report.
+
 ## v0.5 - Diff Awareness
 
 Goal: detect important agent-facing changes without automatically turning every diff into a record.
@@ -140,6 +159,8 @@ Focus:
 - Treat Habitat findings as useful input when they show a mismatch between written instructions and repository reality.
 
 Success means record omissions decrease without forcing tiny edits into the ledger.
+
+This phase depends on the v0.2.x config-loading work. If `config.yaml` is still only generated and not read, do not start diff awareness.
 
 ## v0.6 - Assisted Reflection
 
@@ -188,6 +209,8 @@ Early self-observation should focus on:
 - Do remove, merge, and narrow decisions actually happen?
 - Do automations leave the ledger unchanged when there is no actionable review, failure, or hygiene signal?
 - Are `effective` judgments backed by behavior evidence rather than by the fact that a record was created?
+- Do generated config values actually match CLI behavior?
+- Are early recurring failures visible enough, or does the threshold hide useful weak signals?
 
 If the answer is no, improve the workflow before adding more features.
 

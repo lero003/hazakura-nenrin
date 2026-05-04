@@ -7,6 +7,7 @@ from datetime import date
 from pathlib import Path
 
 from . import __version__
+from .frontmatter import load_config
 from .records import (
     VALID_IMPACTS,
     changes,
@@ -59,8 +60,8 @@ def build_parser() -> argparse.ArgumentParser:
     change_parser.add_argument("--changed", default="TBD")
     change_parser.add_argument("--reason", default="TBD")
     change_parser.add_argument("--expected", default="TBD")
-    change_parser.add_argument("--review-days", type=int, default=7)
-    change_parser.add_argument("--review-tasks", type=int, default=3)
+    change_parser.add_argument("--review-days", type=int, default=None)
+    change_parser.add_argument("--review-tasks", type=int, default=None)
     change_parser.add_argument("--file", action="append", default=[], dest="related_files")
     change_parser.set_defaults(func=cmd_change)
 
@@ -128,6 +129,10 @@ def cmd_init(args: argparse.Namespace) -> int:
 def cmd_change(args: argparse.Namespace) -> int:
     root = Path(args.root)
     ensure_initialized(root)
+    config = load_config(root / "config.yaml")
+    review_defaults = config.get("review_defaults", {})
+    review_days = args.review_days if args.review_days is not None else review_defaults.get("days", 7)
+    review_tasks = args.review_tasks if args.review_tasks is not None else review_defaults.get("tasks", 3)
     today = date.today()
     record_id = slugify(args.name)
     path = unique_record_path(root / "changes", today, record_id)
@@ -139,8 +144,8 @@ def cmd_change(args: argparse.Namespace) -> int:
             changed=args.changed,
             reason=args.reason,
             expected_behavior=args.expected,
-            review_days=args.review_days,
-            review_tasks=args.review_tasks,
+            review_days=review_days,
+            review_tasks=review_tasks,
             related_files=args.related_files,
         ),
         encoding="utf-8",
@@ -155,6 +160,12 @@ def cmd_observe(args: argparse.Namespace) -> int:
     ensure_initialized(root)
     today = date.today()
     record_id = slugify(args.name)
+
+    existing_ids = {record.id for record in load_records(root) if record.type == "nenrin_change"}
+    for change_id in args.related_changes:
+        if change_id not in existing_ids:
+            print(f"Warning: change '{change_id}' not found in ledger; observation may be orphaned.", file=sys.stderr)
+
     path = unique_record_path(root / "observations", today, record_id)
     path.write_text(
         observation_record(

@@ -1,16 +1,18 @@
 from __future__ import annotations
 
 import io
+import sys
 import tempfile
 import unittest
-from contextlib import redirect_stdout
+from contextlib import redirect_stderr, redirect_stdout
 from datetime import date
 from pathlib import Path
 
 from nenrin.cli import main
-from nenrin.frontmatter import dump_frontmatter, parse_frontmatter
+from nenrin.frontmatter import dump_frontmatter, load_config, parse_frontmatter
 from nenrin.records import (
     change_impact_counts,
+    cleanup_candidates,
     load_records,
     observation_impact_counts,
     overdue_changes,
@@ -34,6 +36,38 @@ class FrontmatterTests(unittest.TestCase):
 
         self.assertEqual(parsed, metadata)
         self.assertEqual(body, "# Body\n")
+
+    def test_empty_list_and_dict_round_trip(self) -> None:
+        metadata = {"type": "nenrin_change", "id": "test", "items": [], "mapping": {}}
+        text = dump_frontmatter(metadata, "# Body\n")
+        parsed, body = parse_frontmatter(text)
+        self.assertEqual(parsed["items"], [])
+        self.assertEqual(parsed["mapping"], {})
+        self.assertEqual(body, "# Body\n")
+
+    def test_quoted_value_with_colon_round_trip(self) -> None:
+        metadata = {
+            "type": "nenrin_change",
+            "id": "test",
+            "reason": "check: the colon should survive",
+        }
+        text = dump_frontmatter(metadata, "# Body\n")
+        parsed, body = parse_frontmatter(text)
+        self.assertEqual(parsed["reason"], "check: the colon should survive")
+
+    def test_special_chars_in_value_round_trip(self) -> None:
+        metadata = {
+            "type": "nenrin_change",
+            "id": "test",
+            "note": "value with # hash and [brackets]",
+            "empty_list": [],
+            "empty_dict": {},
+        }
+        text = dump_frontmatter(metadata, "# Body\n")
+        parsed, body = parse_frontmatter(text)
+        self.assertEqual(parsed["note"], "value with # hash and [brackets]")
+        self.assertEqual(parsed["empty_list"], [])
+        self.assertEqual(parsed["empty_dict"], {})
 
 
 class RecordTests(unittest.TestCase):
@@ -198,6 +232,51 @@ class RecordTests(unittest.TestCase):
                 2,
             )
 
+    def test_config_loading(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp) / "nenrin"
+            (root).mkdir()
+            (root / "config.yaml").write_text(
+                "review_defaults:\n  tasks: 5\n  days: 14\n",
+                encoding="utf-8",
+            )
+            config = load_config(root / "config.yaml")
+            self.assertEqual(config["review_defaults"]["tasks"], 5)
+            self.assertEqual(config["review_defaults"]["days"], 14)
+
+    def test_config_loading_missing_file_returns_empty_dict(self) -> None:
+        config = load_config(Path("/nonexistent/config.yaml"))
+        self.assertEqual(config, {})
+
+    def test_cleanup_candidates_by_impact(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp) / "nenrin"
+            for impact, record_id in [
+                ("ineffective", "removal-target"),
+                ("harmful", "harmful-target"),
+                ("partially_effective", "narrow-target"),
+                ("effective", "stay-target"),
+            ]:
+                write_record(
+                    root / "changes" / f"2026-05-01-{record_id}.md",
+                    {
+                        "type": "nenrin_change",
+                        "id": record_id,
+                        "date": "2026-05-01",
+                        "status": "observing",
+                        "impact": impact,
+                    },
+                    "# Change\n",
+                )
+
+            records = load_records(root)
+            candidates = cleanup_candidates(records)
+
+            self.assertTrue(any("removal-target" in c for c in candidates))
+            self.assertTrue(any("harmful-target" in c for c in candidates))
+            self.assertTrue(any("narrow-target" in c for c in candidates))
+            self.assertFalse(any("stay-target" in c for c in candidates))
+
 
 class CliTests(unittest.TestCase):
     def test_init_change_observe_metrics(self) -> None:
@@ -240,6 +319,80 @@ class CliTests(unittest.TestCase):
                 self.assertEqual(main(["--root", str(root), "debt"]), 0)
 
             self.assertIn("# Improvement Debt", output.getvalue())
+
+    def test_cmd_review_creates_templates(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp) / "nenrin"
+
+            self.assertEqual(main(["--root", str(root), "init"]), 0)
+            # Create an overdue change
+            main(["--root", str(root), "change", "Old Change", "--review-days", "1", "--review-tasks", "1"])
+            # This observation pushes it over the task threshold
+            change_files = sorted((root / "changes").glob("*.md"))
+            change_text = change_files[0].read_text(encoding="utf-8")
+            change_id_start = change_text.index("id: ") + 4
+            change_id_end = change_text.index("\n", change_id_start)
+            change_id = change_text[change_id_start:change_id_end].strip()
+
+            main(["--root", str(root), "observe", "Old Obs", "--change", change_id])
+
+            output = io.StringIO()
+            with redirect_stdout(output):
+                self.assertEqual(main(["--root", str(root), "review", "--create"]), 0)
+
+            self.assertIn("created", output.getvalue())
+            review_files = list((root / "reviews").glob("*.md"))
+            self.assertEqual(len(review_files), 1)
+
+    def test_observe_warns_orphan_change(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp) / "nenrin"
+
+            self.assertEqual(main(["--root", str(root), "init"]), 0)
+            stderr = io.StringIO()
+            with redirect_stderr(stderr):
+                self.assertEqual(
+                    main(["--root", str(root), "observe", "Orphan Obs", "--change", "nonexistent-id"]),
+                    0,
+                )
+            self.assertIn("Warning: change 'nonexistent-id' not found", stderr.getvalue())
+
+    def test_unique_record_path_collision(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp) / "nenrin"
+
+            self.assertEqual(main(["--root", str(root), "init"]), 0)
+            self.assertEqual(main(["--root", str(root), "change", "Duplicate"]), 0)
+            self.assertEqual(main(["--root", str(root), "change", "Duplicate"]), 0)
+            change_files = sorted((root / "changes").glob("*.md"))
+            self.assertEqual(len(change_files), 2)
+            self.assertIn("-duplicate-2.md", change_files[0].name)
+
+    def test_slugify_handles_special_chars(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp) / "nenrin"
+
+            self.assertEqual(main(["--root", str(root), "init"]), 0)
+            self.assertEqual(main(["--root", str(root), "change", "Feature: X!@#$%^&*()"]), 0)
+            change_files = list((root / "changes").glob("*.md"))
+            self.assertEqual(len(change_files), 1)
+            self.assertIn("feature-x", change_files[0].name)
+
+    def test_change_uses_config_review_defaults(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp) / "nenrin"
+
+            self.assertEqual(main(["--root", str(root), "init"]), 0)
+            # Override config defaults
+            (root / "config.yaml").write_text(
+                "review_defaults:\n  tasks: 10\n  days: 30\n",
+                encoding="utf-8",
+            )
+            self.assertEqual(main(["--root", str(root), "change", "ConfigTest"]), 0)
+            change_files = list((root / "changes").glob("*.md"))
+            content = change_files[0].read_text(encoding="utf-8")
+            self.assertIn("tasks: 10", content)
+            self.assertIn("days: 30", content)
 
 
 def write_record(path: Path, metadata: dict, body: str) -> None:

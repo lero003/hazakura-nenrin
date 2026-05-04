@@ -34,6 +34,7 @@ Skip a Nenrin record for:
 - implementation-only changes that do not affect future agent behavior
 - temporary instructions that belong in the current handoff only
 - duplicate records where an existing active change already covers the behavior
+- version history already captured clearly in `AGENTS.md`, changelogs, or roadmaps unless there is a specific future behavior to observe
 
 ## First Files To Read
 

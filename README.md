@@ -61,6 +61,14 @@ nenrin debt
 
 `nenrin change` and `nenrin observe` intentionally create editable Markdown templates instead of forcing a heavy questionnaire. The first version optimizes for Codex, Claude Code, Cursor, Windsurf, and similar tools that can fill in records directly.
 
+## Configuration
+
+`nenrin init` creates `nenrin/config.yaml` with defaults. The `review_defaults.tasks` and `review_defaults.days` values are used as fallback defaults for `nenrin change` when `--review-tasks` and `--review-days` are not specified on the command line.
+
+`nenrin observe --change <id>` warns when a referenced change ID does not exist in the ledger, helping catch orphan observations before they accumulate.
+
+The `tracked_files` list in `config.yaml` defines the file patterns that future diff awareness (v0.5) will watch for agent-facing changes.
+
 ## Frontmatter
 
 Nenrin frontmatter supports a small YAML-like subset, not full YAML. It supports scalar values, nested mappings, and simple lists.
