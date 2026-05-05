@@ -8,7 +8,7 @@ from contextlib import redirect_stderr, redirect_stdout
 from datetime import date
 from pathlib import Path
 
-from nenrin.cli import main
+from nenrin.cli import main, render_diff, tracked_file_matches
 from nenrin.frontmatter import dump_frontmatter, load_config, parse_frontmatter
 from nenrin.records import (
     change_impact_counts,
@@ -277,6 +277,42 @@ class RecordTests(unittest.TestCase):
             self.assertTrue(any("narrow-target" in c for c in candidates))
             self.assertFalse(any("stay-target" in c for c in candidates))
 
+    def test_tracked_file_matches_globstar_and_shallow_paths(self) -> None:
+        patterns = ["AGENTS.md", "docs/**/*.md", "skills/**/SKILL.md"]
+
+        self.assertTrue(tracked_file_matches("AGENTS.md", patterns))
+        self.assertTrue(tracked_file_matches("docs/roadmap.md", patterns))
+        self.assertTrue(tracked_file_matches("docs/release/checklist.md", patterns))
+        self.assertTrue(tracked_file_matches("skills/release/SKILL.md", patterns))
+        self.assertFalse(tracked_file_matches("src/nenrin/cli.py", patterns))
+
+    def test_render_diff_reports_related_active_changes(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp) / "nenrin"
+            write_record(
+                root / "changes" / "2026-05-05-docs-guidance.md",
+                {
+                    "type": "nenrin_change",
+                    "id": "docs-guidance",
+                    "date": "2026-05-05",
+                    "status": "observing",
+                    "impact": "unknown",
+                    "related_files": ["docs/**/*.md"],
+                },
+                "# Change\n",
+            )
+            records = load_records(root)
+
+            output = render_diff(
+                ["docs/roadmap.md", "README.md", "src/nenrin/cli.py"],
+                ["README.md", "docs/**/*.md"],
+                records,
+            )
+
+            self.assertIn("docs/roadmap.md: related active change(s): docs-guidance", output)
+            self.assertIn("README.md: no related active change found", output)
+            self.assertNotIn("src/nenrin/cli.py", output)
+
 
 class CliTests(unittest.TestCase):
     def test_init_change_observe_metrics(self) -> None:
@@ -464,10 +500,45 @@ class CliTests(unittest.TestCase):
             self.assertIn("status: reviewed", updated_text)
             self.assertIn("impact: effective", updated_text)
 
+    def test_diff_reports_no_tracked_changes_on_clean_temp_repo(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            project = Path(temp)
+            root = project / "nenrin"
+
+            self.assertEqual(main(["--root", str(root), "init"]), 0)
+            subprocess_run(["git", "init"], cwd=project)
+            subprocess_run(["git", "add", "."], cwd=project)
+            subprocess_run(
+                ["git", "-c", "user.name=Test", "-c", "user.email=test@example.com", "commit", "-m", "init"],
+                cwd=project,
+            )
+
+            output = io.StringIO()
+            with redirect_stdout(output):
+                self.assertEqual(main(["--root", str(root), "diff"]), 0)
+
+            self.assertIn("# Nenrin Diff", output.getvalue())
+            self.assertIn("- None", output.getvalue())
+
 
 def write_record(path: Path, metadata: dict, body: str) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(dump_frontmatter(metadata, body), encoding="utf-8")
+
+
+def subprocess_run(command: list[str], *, cwd: Path) -> None:
+    import subprocess
+
+    result = subprocess.run(
+        command,
+        cwd=cwd,
+        check=False,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+    )
+    if result.returncode != 0:
+        raise AssertionError(result.stderr or result.stdout)
 
 
 if __name__ == "__main__":

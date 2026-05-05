@@ -134,7 +134,7 @@ Success means an agent can understand what to watch without reading every record
 
 Goal: detect important agent-facing changes without automatically turning every diff into a record.
 
-Possible command:
+Command:
 
 ```bash
 nenrin diff

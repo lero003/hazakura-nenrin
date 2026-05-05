@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 import argparse
+import fnmatch
 import re
+import subprocess
 import sys
 from datetime import date
 from pathlib import Path
@@ -89,6 +91,9 @@ def build_parser() -> argparse.ArgumentParser:
 
     brief_parser = subparsers.add_parser("brief", help="Print active observation context for the next agent session.")
     brief_parser.set_defaults(func=cmd_brief)
+
+    diff_parser = subparsers.add_parser("diff", help="Show tracked agent-facing working tree changes.")
+    diff_parser.set_defaults(func=cmd_diff)
 
     return parser
 
@@ -422,6 +427,94 @@ def render_brief(root: Path, records: list) -> str:
     return "\n".join(lines)
 
 
+def cmd_diff(args: argparse.Namespace) -> int:
+    root = Path(args.root)
+    ensure_initialized(root)
+    config = load_config(root / "config.yaml")
+    tracked_patterns = [str(item) for item in _as_list(config.get("tracked_files", []))]
+    project_root = root.resolve().parent
+
+    try:
+        changed_paths = git_changed_paths(project_root)
+    except RuntimeError as error:
+        print(f"Unable to inspect git changes: {error}", file=sys.stderr)
+        return 1
+
+    records = load_records(root)
+    print(render_diff(changed_paths, tracked_patterns, records).rstrip())
+    return 0
+
+
+def render_diff(changed_paths: list[str], tracked_patterns: list[str], records: list) -> str:
+    tracked_changes = [
+        path for path in sorted(changed_paths)
+        if tracked_file_matches(path, tracked_patterns)
+    ]
+    active_changes = [
+        record
+        for record in changes(records)
+        if record.metadata.get("status") in {"observing", "ready_for_review"}
+    ]
+
+    lines = ["# Nenrin Diff", "", "## Tracked Changes", ""]
+    if not tracked_changes:
+        lines.append("- None")
+        lines.append("")
+        return "\n".join(lines)
+
+    for path in tracked_changes:
+        related = [
+            record.id for record in active_changes
+            if tracked_file_matches(path, _as_str_list(record.metadata.get("related_files", [])))
+        ]
+        if related:
+            lines.append(f"- {path}: related active change(s): {', '.join(related)}")
+        else:
+            lines.append(f"- {path}: no related active change found")
+
+    lines.append("")
+    lines.append("## Suggested Action")
+    lines.append("")
+    lines.append("- Create or update a Nenrin change only if this is a durable agent-facing workflow change.")
+    lines.append("")
+    return "\n".join(lines)
+
+
+def git_changed_paths(project_root: Path) -> list[str]:
+    result = subprocess.run(
+        ["git", "-C", str(project_root), "status", "--porcelain"],
+        check=False,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+    )
+    if result.returncode != 0:
+        message = result.stderr.strip() or "git status failed"
+        raise RuntimeError(message)
+
+    paths: list[str] = []
+    for line in result.stdout.splitlines():
+        parsed = _parse_porcelain_path(line)
+        if parsed:
+            paths.append(parsed)
+    return paths
+
+
+def tracked_file_matches(path: str, patterns: list[str]) -> bool:
+    normalized = path.strip().lstrip("./")
+    for pattern in patterns:
+        normalized_pattern = pattern.strip().lstrip("./")
+        if not normalized_pattern:
+            continue
+        if fnmatch.fnmatchcase(normalized, normalized_pattern):
+            return True
+        if "/**/" in normalized_pattern:
+            shallow_pattern = normalized_pattern.replace("/**/", "/")
+            if fnmatch.fnmatchcase(normalized, shallow_pattern):
+                return True
+    return False
+
+
 def _extract_body_item(body: str, section_name: str) -> str:
     in_section = False
     for line in body.splitlines():
@@ -434,6 +527,27 @@ def _extract_body_item(body: str, section_name: str) -> str:
             if item.lower() not in {"tbd", ""}:
                 return item
     return ""
+
+
+def _parse_porcelain_path(line: str) -> str:
+    if len(line) < 4:
+        return ""
+    path = line[3:].strip()
+    if " -> " in path:
+        path = path.rsplit(" -> ", 1)[1]
+    return path.strip('"')
+
+
+def _as_str_list(value) -> list[str]:
+    return [str(item) for item in _as_list(value)]
+
+
+def _as_list(value) -> list:
+    if value is None:
+        return []
+    if isinstance(value, list):
+        return value
+    return [value]
 
 
 def update_index(root: Path) -> None:
