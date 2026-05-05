@@ -482,7 +482,7 @@ def render_diff(changed_paths: list[str], tracked_patterns: list[str], records: 
 
 def git_changed_paths(project_root: Path) -> list[str]:
     result = subprocess.run(
-        ["git", "-C", str(project_root), "status", "--porcelain"],
+        ["git", "-C", str(project_root), "status", "--porcelain=v1", "--untracked-files=all"],
         check=False,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,

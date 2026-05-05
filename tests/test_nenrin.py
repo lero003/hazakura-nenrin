@@ -554,6 +554,29 @@ class CliTests(unittest.TestCase):
             self.assertIn("docs/roadmap.md: no related active change found", output.getvalue())
             self.assertIn("Create or update a Nenrin change only if", output.getvalue())
 
+    def test_diff_reports_untracked_docs_even_when_status_hides_untracked(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            project = Path(temp)
+            root = project / "nenrin"
+
+            self.assertEqual(main(["--root", str(root), "init"]), 0)
+            subprocess_run(["git", "init"], cwd=project)
+            subprocess_run(["git", "config", "status.showUntrackedFiles", "no"], cwd=project)
+            subprocess_run(["git", "add", "."], cwd=project)
+            subprocess_run(
+                ["git", "-c", "user.name=Test", "-c", "user.email=test@example.com", "commit", "-m", "init"],
+                cwd=project,
+            )
+            docs = project / "docs"
+            docs.mkdir()
+            (docs / "new-guidance.md").write_text("# Guidance\n", encoding="utf-8")
+
+            output = io.StringIO()
+            with redirect_stdout(output):
+                self.assertEqual(main(["--root", str(root), "diff"]), 0)
+
+            self.assertIn("docs/new-guidance.md: no related active change found", output.getvalue())
+
 
 def write_record(path: Path, metadata: dict, body: str) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)

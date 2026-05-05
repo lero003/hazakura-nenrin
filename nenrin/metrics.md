@@ -3,21 +3,23 @@
 ## Summary
 
 - Change records: 13
-- Observation records: 2
+- Observation records: 3
 - Review overdue: 0
 
 ## Status
 
-- observing: 13
+- observing: 12
+- reviewed: 1
 
 ## Change Impact
 
-- unknown: 13
+- effective: 1
+- unknown: 12
 
 ## Observation Impact Judgment
 
 - effective: 1
-- partially_effective: 1
+- partially_effective: 2
 
 ## Review Overdue
 

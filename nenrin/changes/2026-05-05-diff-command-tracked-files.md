@@ -2,8 +2,8 @@
 type: nenrin_change
 id: diff-command-tracked-files
 date: 2026-05-05
-status: observing
-impact: unknown
+status: reviewed
+impact: effective
 related_files:
   - README.md
   - docs/roadmap.md
@@ -46,4 +46,4 @@ v0.5 diff awareness needs a small manual omission check before any automated rec
 
 ## Result
 
-Unjudged.
+Reviewed on 2026-05-06 and kept. Two follow-up tasks used this record to choose narrow diff-awareness fixes, and both fixes preserved the command's read-only boundary.
