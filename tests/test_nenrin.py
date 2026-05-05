@@ -529,6 +529,31 @@ class CliTests(unittest.TestCase):
             self.assertIn("# Nenrin Diff", output.getvalue())
             self.assertIn("- None", output.getvalue())
 
+    def test_diff_reports_dirty_tracked_docs_file(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            project = Path(temp)
+            root = project / "nenrin"
+
+            self.assertEqual(main(["--root", str(root), "init"]), 0)
+            docs = project / "docs"
+            docs.mkdir()
+            roadmap = docs / "roadmap.md"
+            roadmap.write_text("# Roadmap\n", encoding="utf-8")
+            subprocess_run(["git", "init"], cwd=project)
+            subprocess_run(["git", "add", "."], cwd=project)
+            subprocess_run(
+                ["git", "-c", "user.name=Test", "-c", "user.email=test@example.com", "commit", "-m", "init"],
+                cwd=project,
+            )
+            roadmap.write_text("# Roadmap\n\nUpdated guidance.\n", encoding="utf-8")
+
+            output = io.StringIO()
+            with redirect_stdout(output):
+                self.assertEqual(main(["--root", str(root), "diff"]), 0)
+
+            self.assertIn("docs/roadmap.md: no related active change found", output.getvalue())
+            self.assertIn("Create or update a Nenrin change only if", output.getvalue())
+
 
 def write_record(path: Path, metadata: dict, body: str) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
