@@ -502,17 +502,33 @@ def git_changed_paths(project_root: Path) -> list[str]:
 
 def tracked_file_matches(path: str, patterns: list[str]) -> bool:
     normalized = path.strip().lstrip("./")
+    path_parts = [part for part in normalized.split("/") if part]
     for pattern in patterns:
         normalized_pattern = pattern.strip().lstrip("./")
         if not normalized_pattern:
             continue
-        if fnmatch.fnmatchcase(normalized, normalized_pattern):
+        pattern_parts = [part for part in normalized_pattern.split("/") if part]
+        if _path_parts_match(path_parts, pattern_parts):
             return True
-        if "/**/" in normalized_pattern:
-            shallow_pattern = normalized_pattern.replace("/**/", "/")
-            if fnmatch.fnmatchcase(normalized, shallow_pattern):
-                return True
     return False
+
+
+def _path_parts_match(path_parts: list[str], pattern_parts: list[str]) -> bool:
+    if not pattern_parts:
+        return not path_parts
+
+    pattern_head = pattern_parts[0]
+    if pattern_head == "**":
+        return (
+            _path_parts_match(path_parts, pattern_parts[1:])
+            or (bool(path_parts) and _path_parts_match(path_parts[1:], pattern_parts))
+        )
+
+    return (
+        bool(path_parts)
+        and fnmatch.fnmatchcase(path_parts[0], pattern_head)
+        and _path_parts_match(path_parts[1:], pattern_parts[1:])
+    )
 
 
 def _extract_body_item(body: str, section_name: str) -> str:

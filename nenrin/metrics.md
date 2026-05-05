@@ -3,7 +3,7 @@
 ## Summary
 
 - Change records: 13
-- Observation records: 1
+- Observation records: 2
 - Review overdue: 0
 
 ## Status
@@ -17,6 +17,7 @@
 ## Observation Impact Judgment
 
 - effective: 1
+- partially_effective: 1
 
 ## Review Overdue
 

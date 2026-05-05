@@ -284,7 +284,16 @@ class RecordTests(unittest.TestCase):
         self.assertTrue(tracked_file_matches("docs/roadmap.md", patterns))
         self.assertTrue(tracked_file_matches("docs/release/checklist.md", patterns))
         self.assertTrue(tracked_file_matches("skills/release/SKILL.md", patterns))
+        self.assertTrue(tracked_file_matches("skills/release/review/SKILL.md", patterns))
         self.assertFalse(tracked_file_matches("src/nenrin/cli.py", patterns))
+
+    def test_tracked_file_matches_single_star_stays_in_one_directory(self) -> None:
+        patterns = ["docs/*.md", "skills/*/SKILL.md"]
+
+        self.assertTrue(tracked_file_matches("docs/roadmap.md", patterns))
+        self.assertTrue(tracked_file_matches("skills/release/SKILL.md", patterns))
+        self.assertFalse(tracked_file_matches("docs/release/checklist.md", patterns))
+        self.assertFalse(tracked_file_matches("skills/release/review/SKILL.md", patterns))
 
     def test_render_diff_reports_related_active_changes(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
