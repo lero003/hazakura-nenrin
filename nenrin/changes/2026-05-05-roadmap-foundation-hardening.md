@@ -32,11 +32,13 @@ External review identified config.yaml and frontmatter correctness as blockers f
 
 ## Success Signals
 
-- TBD
+- Foundation fixes are chosen before adding broader briefing, diff, or AI-assistance behavior.
+- Later roadmap work cites parser/config/validation readiness when deciding whether a larger automation is safe.
 
 ## Failure Signals
 
-- TBD
+- New briefing, diff, or AI-assistance scope is added while parser/config/validation behavior is still uncertain.
+- Generated `index.md`, `metrics.md`, or `brief` output becomes harder to trust because foundation checks are skipped.
 
 ## Result
 
