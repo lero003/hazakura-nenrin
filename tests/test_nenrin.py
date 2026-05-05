@@ -8,7 +8,7 @@ from contextlib import redirect_stderr, redirect_stdout
 from datetime import date
 from pathlib import Path
 
-from nenrin.cli import main, render_diff, tracked_file_matches
+from nenrin.cli import main, render_diff, tracked_file_matches, git_changed_paths
 from nenrin.frontmatter import dump_frontmatter, load_config, parse_frontmatter
 from nenrin.records import (
     change_impact_counts,
@@ -576,6 +576,49 @@ class CliTests(unittest.TestCase):
                 self.assertEqual(main(["--root", str(root), "diff"]), 0)
 
             self.assertIn("docs/new-guidance.md: no related active change found", output.getvalue())
+
+    def test_diff_keeps_untracked_paths_with_spaces_unquoted(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            project = Path(temp)
+            root = project / "nenrin"
+
+            self.assertEqual(main(["--root", str(root), "init"]), 0)
+            subprocess_run(["git", "init"], cwd=project)
+            subprocess_run(["git", "add", "."], cwd=project)
+            subprocess_run(
+                ["git", "-c", "user.name=Test", "-c", "user.email=test@example.com", "commit", "-m", "init"],
+                cwd=project,
+            )
+            docs = project / "docs"
+            docs.mkdir()
+            (docs / "agent guidance.md").write_text("# Guidance\n", encoding="utf-8")
+
+            output = io.StringIO()
+            with redirect_stdout(output):
+                self.assertEqual(main(["--root", str(root), "diff"]), 0)
+
+            self.assertIn("docs/agent guidance.md: no related active change found", output.getvalue())
+            self.assertNotIn('"docs/agent guidance.md"', output.getvalue())
+
+    def test_git_changed_paths_reports_rename_target_with_spaces(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            project = Path(temp)
+            docs = project / "docs"
+            docs.mkdir()
+            old_path = docs / "old guidance.md"
+            old_path.write_text("# Guidance\n", encoding="utf-8")
+            subprocess_run(["git", "init"], cwd=project)
+            subprocess_run(["git", "add", "."], cwd=project)
+            subprocess_run(
+                ["git", "-c", "user.name=Test", "-c", "user.email=test@example.com", "commit", "-m", "init"],
+                cwd=project,
+            )
+
+            new_path = docs / "new guidance.md"
+            old_path.rename(new_path)
+            subprocess_run(["git", "add", "-A"], cwd=project)
+
+            self.assertEqual(git_changed_paths(project), ["docs/new guidance.md"])
 
 
 def write_record(path: Path, metadata: dict, body: str) -> None:

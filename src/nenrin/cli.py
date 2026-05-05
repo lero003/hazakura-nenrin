@@ -482,21 +482,35 @@ def render_diff(changed_paths: list[str], tracked_patterns: list[str], records: 
 
 def git_changed_paths(project_root: Path) -> list[str]:
     result = subprocess.run(
-        ["git", "-C", str(project_root), "status", "--porcelain=v1", "--untracked-files=all"],
+        ["git", "-C", str(project_root), "status", "--porcelain=v1", "-z", "--untracked-files=all"],
         check=False,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
-        text=True,
     )
     if result.returncode != 0:
-        message = result.stderr.strip() or "git status failed"
+        message = result.stderr.decode("utf-8", errors="replace").strip() or "git status failed"
         raise RuntimeError(message)
 
+    return _parse_porcelain_paths(result.stdout)
+
+
+def _parse_porcelain_paths(output: bytes) -> list[str]:
     paths: list[str] = []
-    for line in result.stdout.splitlines():
-        parsed = _parse_porcelain_path(line)
+    entries = output.split(b"\0")
+    index = 0
+    while index < len(entries):
+        entry = entries[index]
+        index += 1
+        if not entry:
+            continue
+
+        parsed = _parse_porcelain_path(entry)
         if parsed:
             paths.append(parsed)
+
+        status = entry[:2].decode("ascii", errors="ignore")
+        if status.startswith(("R", "C")):
+            index += 1
     return paths
 
 
@@ -545,13 +559,10 @@ def _extract_body_item(body: str, section_name: str) -> str:
     return ""
 
 
-def _parse_porcelain_path(line: str) -> str:
-    if len(line) < 4:
+def _parse_porcelain_path(entry: bytes) -> str:
+    if len(entry) < 4:
         return ""
-    path = line[3:].strip()
-    if " -> " in path:
-        path = path.rsplit(" -> ", 1)[1]
-    return path.strip('"')
+    return entry[3:].decode("utf-8", errors="surrogateescape").strip()
 
 
 def _as_str_list(value) -> list[str]:
