@@ -203,7 +203,7 @@ Observation records may include optional `success_tags` and `failure_tags` to re
 
 ## Review Flow
 
-Review records include `final_judgment`. Run `nenrin review --apply` to propagate completed review judgments back to the related change's `status` and `impact`.
+Review records include `final_judgment`. Run `nenrin review --apply` to propagate completed review judgments back to the related change's `status` and `impact`; unsupported values warn and leave the change unchanged.
 """
 
 

@@ -125,6 +125,10 @@ All commands accept `--root <path>` to point to a non-default ledger directory (
 | `move_to_*` | `archived` | `effective` |
 | `keep_observing` | *no change* | *no change* |
 
+Unsupported non-default `final_judgment` values emit a warning and leave the
+related change unchanged, so typoed review decisions do not silently prune a
+record.
+
 The `tracked_files` list in `config.yaml` defines the file patterns that `nenrin diff` watches for agent-facing changes.
 
 ## Frontmatter
@@ -144,7 +148,7 @@ success_tags:
 ---
 ```
 
-Review records include `final_judgment`. Use `nenrin review --apply` to propagate completed review judgments back to the related change's `status` and `impact`.
+Review records include `final_judgment`. Use `nenrin review --apply` to propagate completed review judgments back to the related change's `status` and `impact`; unsupported values warn and leave the change unchanged.
 
 ## Tests
 
