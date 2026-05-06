@@ -515,16 +515,22 @@ def _parse_porcelain_paths(output: bytes) -> list[str]:
 
 
 def tracked_file_matches(path: str, patterns: list[str]) -> bool:
-    normalized = path.strip().lstrip("./")
+    normalized = _strip_relative_prefix(path)
     path_parts = [part for part in normalized.split("/") if part]
     for pattern in patterns:
-        normalized_pattern = pattern.strip().lstrip("./")
+        normalized_pattern = _strip_relative_prefix(pattern.strip())
         if not normalized_pattern:
             continue
         pattern_parts = [part for part in normalized_pattern.split("/") if part]
         if _path_parts_match(path_parts, pattern_parts):
             return True
     return False
+
+
+def _strip_relative_prefix(path: str) -> str:
+    while path.startswith("./"):
+        path = path[2:]
+    return path
 
 
 def _path_parts_match(path_parts: list[str], pattern_parts: list[str]) -> bool:

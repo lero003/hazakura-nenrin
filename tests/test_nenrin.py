@@ -600,7 +600,7 @@ class CliTests(unittest.TestCase):
             self.assertIn("docs/agent guidance.md: no related active change found", output.getvalue())
             self.assertNotIn('"docs/agent guidance.md"', output.getvalue())
 
-    def test_diff_preserves_trailing_spaces_in_porcelain_paths(self) -> None:
+    def test_diff_preserves_inner_spaces_in_porcelain_paths(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             project = Path(temp)
             root = project / "nenrin"
@@ -614,14 +614,19 @@ class CliTests(unittest.TestCase):
             )
             docs = project / "docs"
             docs.mkdir()
-            (docs / "agent guidance.md ").write_text("# Guidance\n", encoding="utf-8")
+            (docs / "agent guidance .md").write_text("# Guidance\n", encoding="utf-8")
 
             output = io.StringIO()
             with redirect_stdout(output):
                 self.assertEqual(main(["--root", str(root), "diff"]), 0)
 
-            self.assertIn("docs/agent guidance.md : no related active change found", output.getvalue())
+            self.assertIn("docs/agent guidance .md: no related active change found", output.getvalue())
             self.assertNotIn("docs/agent guidance.md: no related active change found", output.getvalue())
+
+    def test_tracked_file_matching_preserves_path_boundary_spaces(self) -> None:
+        self.assertTrue(tracked_file_matches("./docs/agent guidance.md", [" docs/**/*.md "]))
+        self.assertFalse(tracked_file_matches("docs/agent guidance.md ", ["docs/**/*.md"]))
+        self.assertFalse(tracked_file_matches(" docs/agent guidance.md", ["docs/**/*.md"]))
 
     def test_git_changed_paths_reports_rename_target_with_spaces(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
