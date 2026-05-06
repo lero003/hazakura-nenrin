@@ -150,6 +150,8 @@ def recurring_failure_signals(records: list[Record]) -> Counter[str]:
 def cleanup_candidates(records: list[Record]) -> list[str]:
     candidates: list[str] = []
     for record in changes(records):
+        if record.metadata.get("status") not in {"observing", "ready_for_review"}:
+            continue
         impact = str(record.metadata.get("impact", "unknown"))
         if impact == "ineffective":
             candidates.append(f"{record.id}: consider remove, merge, narrow, or move")

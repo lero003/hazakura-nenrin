@@ -272,11 +272,13 @@ class RecordTests(unittest.TestCase):
     def test_cleanup_candidates_by_impact(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp) / "nenrin"
-            for impact, record_id in [
-                ("ineffective", "removal-target"),
-                ("harmful", "harmful-target"),
-                ("partially_effective", "narrow-target"),
-                ("effective", "stay-target"),
+            for impact, status, record_id in [
+                ("ineffective", "observing", "removal-target"),
+                ("harmful", "observing", "harmful-target"),
+                ("partially_effective", "observing", "narrow-target"),
+                ("effective", "observing", "stay-target"),
+                ("ineffective", "archived", "already-removed"),
+                ("partially_effective", "reviewed", "already-narrowed"),
             ]:
                 write_record(
                     root / "changes" / f"2026-05-01-{record_id}.md",
@@ -284,7 +286,7 @@ class RecordTests(unittest.TestCase):
                         "type": "nenrin_change",
                         "id": record_id,
                         "date": "2026-05-01",
-                        "status": "observing",
+                        "status": status,
                         "impact": impact,
                     },
                     "# Change\n",
@@ -297,6 +299,8 @@ class RecordTests(unittest.TestCase):
             self.assertTrue(any("harmful-target" in c for c in candidates))
             self.assertTrue(any("narrow-target" in c for c in candidates))
             self.assertFalse(any("stay-target" in c for c in candidates))
+            self.assertFalse(any("already-removed" in c for c in candidates))
+            self.assertFalse(any("already-narrowed" in c for c in candidates))
 
     def test_tracked_file_matches_globstar_and_shallow_paths(self) -> None:
         patterns = ["AGENTS.md", "docs/**/*.md", "skills/**/SKILL.md"]
