@@ -373,6 +373,8 @@ def _apply_reviews(root: Path) -> int:
         applied += 1
 
     if applied:
+        records = load_records(root)
+        (root / "metrics.md").write_text(render_metrics(root, records), encoding="utf-8")
         update_index(root)
     else:
         print("No review judgments to apply.")

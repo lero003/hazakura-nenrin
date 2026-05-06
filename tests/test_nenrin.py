@@ -529,6 +529,9 @@ class CliTests(unittest.TestCase):
             updated_text = change_files[0].read_text(encoding="utf-8")
             self.assertIn("status: reviewed", updated_text)
             self.assertIn("impact: effective", updated_text)
+            metrics_text = (root / "metrics.md").read_text(encoding="utf-8")
+            self.assertIn("- reviewed: 1", metrics_text)
+            self.assertIn("- effective: 1", metrics_text)
 
     def test_review_apply_warns_on_unsupported_final_judgment(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
