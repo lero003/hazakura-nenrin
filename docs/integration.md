@@ -2,6 +2,10 @@
 
 Nenrin can be used directly as a CLI, but it is also designed to be called from a development harness.
 
+The examples below use `nenrin` for the installed command. A harness running
+from an uninstalled checkout should call `uv run nenrin <command>` or run the
+module with `PYTHONPATH=src python3 -m nenrin <command>`.
+
 A harness may call:
 
 - `nenrin brief` before work, to recall relevant context without reading every record

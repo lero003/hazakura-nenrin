@@ -39,6 +39,11 @@ nenrin review
 nenrin diff
 ```
 
+The quick start installs the editable package first, so later examples use the
+short `nenrin` command. When working from a fresh checkout without installing,
+use `uv run nenrin <command>` instead. Minimal Python environments can also use
+`PYTHONPATH=src python3 -m nenrin <command>`.
+
 All records are Markdown files under `nenrin/` with YAML-like frontmatter that humans and coding agents can both read.
 
 See `examples/nenrin/` for a tiny sample ledger.
@@ -73,6 +78,11 @@ Create records for durable changes to agent-facing behavior: instructions, skill
 Treat `effective` as a behavior claim, not a feeling of progress. Use it when evidence shows a changed next command, a narrower cleanup choice, a safer review path, or a concrete reduction in recurring friction. If the evidence only says a record was read or written, keep the impact unknown or partially effective and write the uncertainty in the review note.
 
 ## Commands
+
+Command examples in this README prefer `nenrin` after installation. Agent quick
+references may use the same short form when the CLI is already on `PATH`; setup
+and fresh-checkout instructions should show the install step or use
+`uv run nenrin`.
 
 ```bash
 nenrin init

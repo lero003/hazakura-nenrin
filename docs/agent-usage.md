@@ -2,6 +2,10 @@
 
 Use this guidance when adding Nenrin to `AGENTS.md`, `CLAUDE.md`, project instructions, or a skill.
 
+Command examples below assume the `nenrin` CLI is already installed or available
+on `PATH`. In a fresh checkout, use `uv run nenrin <command>` or install the
+editable package first.
+
 ## Minimal Rule
 
 ```md
