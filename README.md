@@ -1,10 +1,29 @@
 # Hazakura Nenrin
 
-Hazakura Nenrin is a lightweight improvement observation ledger for AI-first development. If you prefer agile language, you can think of it as a small retrospective ledger for agent-environment changes.
+Hazakura Nenrin is a small pruning ledger for development judgment.
 
-It helps you record changes to agent-facing artifacts such as `AGENTS.md`, `SKILL.md`, handoffs, checklists, roadmaps, and QA gates, then observe whether those changes actually improved later agent behavior.
+It helps humans and agents:
 
-Nenrin is not prompt eval, production observability, or an agent runtime. It is closer to a small retrospective ledger for your AI working environment: why you added a rule, what behavior you expected, what happened later, and whether to keep, remove, merge, narrow, or move that improvement.
+- remember past decisions and unresolved concerns before work
+- decide whether a change is worth recording after work
+- periodically review stale hypotheses, debts, and pending reviews
+- treat no-op pruning as a healthy outcome
+
+Nenrin can be used as a standalone CLI, but it is also intended as a reference implementation for development harnesses that want low-friction recall, review, and pruning. The harness owns execution. Nenrin owns the lightweight judgment ledger.
+
+## What Nenrin Is Not
+
+Nenrin is not:
+
+- a task manager
+- a full activity log
+- a memory dump
+- a project management system
+- an AI agent framework
+- a scoring or ranking system
+- prompt eval or production observability
+
+Its value comes from recording less, not more: decisions, concerns, and hypotheses that may matter later, plus the evidence needed to keep, remove, merge, narrow, or move them.
 
 ## Quick Start
 
@@ -22,6 +41,8 @@ All records are Markdown files under `nenrin/` with YAML-like frontmatter that h
 See `examples/nenrin/` for a tiny sample ledger.
 
 See `docs/roadmap.md` for the current direction. The roadmap is intentionally evidence-led: Nenrin should evolve through observed use, not through a large feature checklist.
+
+See `docs/integration.md` for guidance on calling Nenrin from a development harness.
 
 See `docs/philosophy.md` for the early product stance behind Nenrin.
 
@@ -117,3 +138,7 @@ Review records include `final_judgment`. Use `nenrin review --apply` to propagat
 ```bash
 PYTHONPATH=src python3 -m unittest discover -s tests
 ```
+
+## License
+
+MIT License. See `LICENSE`.

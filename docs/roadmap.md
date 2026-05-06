@@ -32,9 +32,9 @@ Current self-use suggests this working split:
 
 Nenrin should not try to beat `AGENTS.md` at immediate instruction or become a second version history. Its value should be judged after several tasks, when `observing` and `unknown` records can be reviewed against behavior evidence and pruned if `AGENTS.md` already carries the durable context well enough.
 
-## v0.1 - Minimal Ledger
+## v0.1 - Pruning Ledger Reference Beta
 
-Goal: create change and observation records.
+Goal: present a low-friction pruning-ledger model as a usable reference implementation.
 
 Current scope:
 
@@ -44,10 +44,21 @@ Current scope:
 - `nenrin review`
 - `nenrin metrics`
 - `nenrin debt`
+- `nenrin brief`
+- `nenrin diff`
 - Markdown records with small YAML-like frontmatter
 - `changes/`, `observations/`, `reviews/`, templates, config, README
 
-Success means an agent-facing change can be recorded, a later task can add an observation, and overdue or stale improvements are visible enough to review.
+The `v0.1.0-beta.1` release should prove the shape, not completeness as a large application. Nenrin should be understandable as a standalone CLI and as a reference implementation for harnesses that want lightweight recall, review, and pruning.
+
+Success means:
+
+- users understand that Nenrin is not a task manager, full activity log, or AI agent framework
+- no-op pruning is accepted as a healthy outcome
+- a fresh checkout can run the basic workflow
+- harness authors can see where Nenrin fits without making it responsible for execution
+- the ledger does not encourage recording everything
+- review, debt, and pruning flows feel natural without much process
 
 ## v0.2 - Low-Friction Operation
 
