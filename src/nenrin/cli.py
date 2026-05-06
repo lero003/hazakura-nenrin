@@ -345,8 +345,14 @@ def _apply_reviews(root: Path) -> int:
     for review in records:
         if review.type != "nenrin_review":
             continue
-        judgment = str(review.metadata.get("final_judgment", ""))
-        if judgment == "keep_observing" or judgment not in _REVIEW_JUDGMENT_MAP:
+        judgment = str(review.metadata.get("final_judgment", "keep_observing")).strip()
+        if judgment == "keep_observing":
+            continue
+        if judgment not in _REVIEW_JUDGMENT_MAP:
+            print(
+                f"Warning: unsupported final_judgment '{judgment}' for review '{review.id}'.",
+                file=sys.stderr,
+            )
             continue
 
         mapping = _REVIEW_JUDGMENT_MAP[judgment]

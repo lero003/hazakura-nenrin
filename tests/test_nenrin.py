@@ -530,6 +530,35 @@ class CliTests(unittest.TestCase):
             self.assertIn("status: reviewed", updated_text)
             self.assertIn("impact: effective", updated_text)
 
+    def test_review_apply_warns_on_unsupported_final_judgment(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp) / "nenrin"
+
+            self.assertEqual(main(["--root", str(root), "init"]), 0)
+            main(["--root", str(root), "change", "TypoTest", "--review-days", "1", "--review-tasks", "1"])
+            change_files = sorted((root / "changes").glob("*.md"))
+            change_text = change_files[0].read_text(encoding="utf-8")
+            change_id_start = change_text.index("id: ") + 4
+            change_id_end = change_text.index("\n", change_id_start)
+            change_id = change_text[change_id_start:change_id_end].strip()
+
+            main(["--root", str(root), "observe", "Typo Obs", "--change", change_id])
+            main(["--root", str(root), "review", "--create"])
+
+            review_files = sorted((root / "reviews").glob("*.md"))
+            review_text = review_files[0].read_text(encoding="utf-8")
+            review_text = review_text.replace("keep_observing", "keep_typo")
+            review_files[0].write_text(review_text, encoding="utf-8")
+
+            stderr = io.StringIO()
+            with redirect_stderr(stderr):
+                self.assertEqual(main(["--root", str(root), "review", "--apply"]), 0)
+
+            self.assertIn("unsupported final_judgment 'keep_typo'", stderr.getvalue())
+            unchanged_text = change_files[0].read_text(encoding="utf-8")
+            self.assertIn("status: observing", unchanged_text)
+            self.assertIn("impact: unknown", unchanged_text)
+
     def test_diff_reports_no_tracked_changes_on_clean_temp_repo(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             project = Path(temp)
