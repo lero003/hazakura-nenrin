@@ -366,6 +366,8 @@ def _apply_reviews(root: Path) -> int:
         change = change_matches[0]
         text = change.path.read_text(encoding="utf-8")
         metadata, body = parse_frontmatter(text)
+        if metadata.get("status") == mapping["status"] and metadata.get("impact") == mapping["impact"]:
+            continue
         metadata["status"] = mapping["status"]
         metadata["impact"] = mapping["impact"]
         change.path.write_text(dump_frontmatter(metadata, body), encoding="utf-8")

@@ -562,6 +562,34 @@ class CliTests(unittest.TestCase):
             self.assertIn("status: observing", unchanged_text)
             self.assertIn("impact: unknown", unchanged_text)
 
+    def test_review_apply_skips_already_applied_judgment(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp) / "nenrin"
+
+            self.assertEqual(main(["--root", str(root), "init"]), 0)
+            main(["--root", str(root), "change", "Already Applied", "--review-days", "1", "--review-tasks", "1"])
+            change_files = sorted((root / "changes").glob("*.md"))
+            change_text = change_files[0].read_text(encoding="utf-8")
+            change_id_start = change_text.index("id: ") + 4
+            change_id_end = change_text.index("\n", change_id_start)
+            change_id = change_text[change_id_start:change_id_end].strip()
+
+            main(["--root", str(root), "observe", "Already Applied Obs", "--change", change_id])
+            main(["--root", str(root), "review", "--create"])
+
+            review_files = sorted((root / "reviews").glob("*.md"))
+            review_text = review_files[0].read_text(encoding="utf-8")
+            review_files[0].write_text(review_text.replace("keep_observing", "keep"), encoding="utf-8")
+
+            self.assertEqual(main(["--root", str(root), "review", "--apply"]), 0)
+
+            output = io.StringIO()
+            with redirect_stdout(output):
+                self.assertEqual(main(["--root", str(root), "review", "--apply"]), 0)
+
+            self.assertIn("No review judgments to apply.", output.getvalue())
+            self.assertNotIn("keep \u2192 already-applied", output.getvalue())
+
     def test_diff_reports_no_tracked_changes_on_clean_temp_repo(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             project = Path(temp)
