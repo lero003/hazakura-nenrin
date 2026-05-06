@@ -115,7 +115,7 @@ All commands accept `--root <path>` to point to a non-default ledger directory (
 | `move_to_*` | `archived` | `effective` |
 | `keep_observing` | *no change* | *no change* |
 
-The `tracked_files` list in `config.yaml` defines the file patterns that future diff awareness (v0.5) will watch for agent-facing changes.
+The `tracked_files` list in `config.yaml` defines the file patterns that `nenrin diff` watches for agent-facing changes.
 
 ## Frontmatter
 
