@@ -22,6 +22,11 @@ Create or update a Nenrin change record when you make a durable change to:
 - QA gates or review criteria
 - recurring automation or workflow guidance
 
+When implementation, verification, or real use shows that the roadmap or
+related docs no longer match the best next direction, update the relevant doc
+in the same small slice. Keep that update evidence-based and directly tied to
+the work at hand.
+
 After related work, create an observation record when an active change affected the task.
 
 Prefer keep, remove, merge, narrow, move-to-skill, move-to-handoff, or move-to-checklist decisions over adding more permanent rules by default.

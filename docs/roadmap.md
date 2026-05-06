@@ -14,6 +14,7 @@ Nenrin should evolve through observed use. Do not add automation before the manu
 - Cleanup decisions matter as much as adding new guidance.
 - Nenrin should close, narrow, move, or remove improvements more readily than it creates new permanent guidance.
 - No-op is a valid automation outcome when there is no actionable signal.
+- When real work exposes small roadmap or documentation drift, update the relevant doc in the same slice instead of leaving the guidance only in chat.
 - Keep states small and put confidence in review evidence, not in more status values.
 - `AGENTS.md`, roadmap, and development docs remain the operational source of truth for current work; Nenrin should test whether changes to those sources earned their place.
 - Habitat is a strong proving ground, but Nenrin should not depend on Habitat.
