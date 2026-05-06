@@ -129,7 +129,8 @@ def _format_scalar(value: Any) -> str:
     if not text:
         return '""'
     if any(char in text for char in [":", "#", "[", "]", "{", "}", ","]):
-        return '"' + text.replace('"', '\\"') + '"'
+        escaped = text.replace("\\", "\\\\").replace('"', '\\"')
+        return '"' + escaped + '"'
     return text
 
 
