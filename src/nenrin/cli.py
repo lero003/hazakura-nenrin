@@ -562,7 +562,7 @@ def _extract_body_item(body: str, section_name: str) -> str:
 def _parse_porcelain_path(entry: bytes) -> str:
     if len(entry) < 4:
         return ""
-    return entry[3:].decode("utf-8", errors="surrogateescape").strip()
+    return entry[3:].decode("utf-8", errors="surrogateescape")
 
 
 def _as_str_list(value) -> list[str]:
