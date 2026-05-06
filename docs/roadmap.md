@@ -84,7 +84,7 @@ Goal: remove hidden correctness gaps before review, briefing, and diff automatio
 Focus:
 
 - ~~Parse `config.yaml` and use `review_defaults` for `nenrin change`.~~
-- ~~Treat `tracked_files` as the future contract for `nenrin diff`, even before diff awareness ships.~~
+- ~~Treat `tracked_files` as the runtime contract for `nenrin diff`.~~
 - ~~Fix frontmatter parser edge cases or adopt a small maintained YAML parser if the dependency cost stays low.~~
 - ~~Add cross-record validation so `nenrin observe --change <id>` does not silently create orphan observations.~~
 - ~~Broaden tests around frontmatter edge cases, `cmd_review --create`, `cleanup_candidates()`, `unique_record_path()`, and `slugify()`.~~
