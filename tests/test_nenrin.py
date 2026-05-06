@@ -55,6 +55,16 @@ class FrontmatterTests(unittest.TestCase):
         parsed, body = parse_frontmatter(text)
         self.assertEqual(parsed["reason"], "check: the colon should survive")
 
+    def test_quoted_value_with_escaped_quote_round_trip(self) -> None:
+        metadata = {
+            "type": "nenrin_change",
+            "id": "test",
+            "reason": 'agent note: keep "effective" evidence strict',
+        }
+        text = dump_frontmatter(metadata, "# Body\n")
+        parsed, body = parse_frontmatter(text)
+        self.assertEqual(parsed["reason"], 'agent note: keep "effective" evidence strict')
+
     def test_special_chars_in_value_round_trip(self) -> None:
         metadata = {
             "type": "nenrin_change",

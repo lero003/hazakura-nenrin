@@ -88,7 +88,7 @@ def _parse_scalar(value: str) -> Any:
     if value.lower() in {"null", "none"}:
         return None
     if value.startswith('"') and value.endswith('"'):
-        return value[1:-1]
+        return _unescape_double_quoted(value[1:-1])
     if value.startswith("'") and value.endswith("'"):
         return value[1:-1]
     try:
@@ -131,6 +131,22 @@ def _format_scalar(value: Any) -> str:
     if any(char in text for char in [":", "#", "[", "]", "{", "}", ","]):
         return '"' + text.replace('"', '\\"') + '"'
     return text
+
+
+def _unescape_double_quoted(value: str) -> str:
+    result: list[str] = []
+    index = 0
+    while index < len(value):
+        char = value[index]
+        if char == "\\" and index + 1 < len(value):
+            next_char = value[index + 1]
+            if next_char in {'"', "\\"}:
+                result.append(next_char)
+                index += 2
+                continue
+        result.append(char)
+        index += 1
+    return "".join(result)
 
 
 def load_config(path: Path) -> dict[str, Any]:
