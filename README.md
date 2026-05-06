@@ -32,8 +32,11 @@ python3 -m pip install -e .
 nenrin init
 nenrin change release-review-checklist
 nenrin observe v0-3-release-review --change release-review-checklist
+nenrin brief
 nenrin metrics
 nenrin debt
+nenrin review
+nenrin diff
 ```
 
 All records are Markdown files under `nenrin/` with YAML-like frontmatter that humans and coding agents can both read.
