@@ -2,7 +2,7 @@
 
 ## Active Summary
 
-- observing: 13
+- observing: 14
 - reviewed: 1
 
 ## Active Changes
@@ -20,6 +20,7 @@
 - `v0-6-cloudflare-backend-abstraction` - [changes/2026-05-04-v0-6-cloudflare-backend-abstraction.md](changes/2026-05-04-v0-6-cloudflare-backend-abstraction.md)
 - `roadmap-foundation-hardening` - [changes/2026-05-05-roadmap-foundation-hardening.md](changes/2026-05-05-roadmap-foundation-hardening.md)
 - `release-beta-reference-positioning` - [changes/2026-05-06-release-beta-reference-positioning.md](changes/2026-05-06-release-beta-reference-positioning.md)
+- `track-ledger-readme-diff` - [changes/2026-05-07-track-ledger-readme-diff.md](changes/2026-05-07-track-ledger-readme-diff.md)
 
 ## Review Due
 

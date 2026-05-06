@@ -13,6 +13,7 @@ tracked_files:
   - AGENTS.md
   - CLAUDE.md
   - README.md
+  - nenrin/README.md
   - docs/**/*.md
   - skills/**/SKILL.md
   - handoff/**/*.md

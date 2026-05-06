@@ -356,6 +356,10 @@ class CliTests(unittest.TestCase):
             self.assertEqual(main(["--root", str(root), "init"]), 0)
             self.assertTrue((root / "README.md").exists())
             self.assertTrue((root / "config.yaml").exists())
+            self.assertIn(
+                "  - nenrin/README.md",
+                (root / "config.yaml").read_text(encoding="utf-8"),
+            )
 
             self.assertEqual(main(["--root", str(root), "change", "Release Review"]), 0)
             change_files = list((root / "changes").glob("*.md"))
@@ -638,6 +642,27 @@ class CliTests(unittest.TestCase):
 
             self.assertIn("docs/roadmap.md: no related active change found", output.getvalue())
             self.assertIn("Create or update a Nenrin change only if", output.getvalue())
+
+    def test_diff_reports_dirty_ledger_readme(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            project = Path(temp)
+            root = project / "nenrin"
+
+            self.assertEqual(main(["--root", str(root), "init"]), 0)
+            subprocess_run(["git", "init"], cwd=project)
+            subprocess_run(["git", "add", "."], cwd=project)
+            subprocess_run(
+                ["git", "-c", "user.name=Test", "-c", "user.email=test@example.com", "commit", "-m", "init"],
+                cwd=project,
+            )
+            readme = root / "README.md"
+            readme.write_text(readme.read_text(encoding="utf-8") + "\nAgent note.\n", encoding="utf-8")
+
+            output = io.StringIO()
+            with redirect_stdout(output):
+                self.assertEqual(main(["--root", str(root), "diff"]), 0)
+
+            self.assertIn("nenrin/README.md: no related active change found", output.getvalue())
 
     def test_diff_reports_untracked_docs_even_when_status_hides_untracked(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
