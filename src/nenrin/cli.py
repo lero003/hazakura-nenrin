@@ -211,7 +211,16 @@ def cmd_review(args: argparse.Namespace) -> int:
 
     if args.create:
         today = date.today()
+        existing_review_targets = {
+            str(record.metadata.get("related_change", ""))
+            for record in records
+            if record.type == "nenrin_review"
+        }
+        created = False
         for item in overdue:
+            if item.change.id in existing_review_targets:
+                print(f"review already exists for {item.change.id}; skipping")
+                continue
             record_id = f"review-{item.change.id}-{today.isoformat()}"
             path = unique_record_path(root / "reviews", today, record_id)
             path.write_text(
@@ -224,7 +233,9 @@ def cmd_review(args: argparse.Namespace) -> int:
                 encoding="utf-8",
             )
             print(f"created {path}")
-        update_index(root)
+            created = True
+        if created:
+            update_index(root)
 
     return 0
 

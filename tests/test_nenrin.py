@@ -418,6 +418,29 @@ class CliTests(unittest.TestCase):
             review_files = list((root / "reviews").glob("*.md"))
             self.assertEqual(len(review_files), 1)
 
+    def test_cmd_review_create_skips_existing_review(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp) / "nenrin"
+
+            self.assertEqual(main(["--root", str(root), "init"]), 0)
+            main(["--root", str(root), "change", "Old Change", "--review-days", "1", "--review-tasks", "1"])
+            change_files = sorted((root / "changes").glob("*.md"))
+            change_text = change_files[0].read_text(encoding="utf-8")
+            change_id_start = change_text.index("id: ") + 4
+            change_id_end = change_text.index("\n", change_id_start)
+            change_id = change_text[change_id_start:change_id_end].strip()
+
+            main(["--root", str(root), "observe", "Old Obs", "--change", change_id])
+            self.assertEqual(main(["--root", str(root), "review", "--create"]), 0)
+
+            output = io.StringIO()
+            with redirect_stdout(output):
+                self.assertEqual(main(["--root", str(root), "review", "--create"]), 0)
+
+            self.assertIn("review already exists for old-change; skipping", output.getvalue())
+            review_files = list((root / "reviews").glob("*.md"))
+            self.assertEqual(len(review_files), 1)
+
     def test_observe_warns_orphan_change(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp) / "nenrin"
