@@ -2,7 +2,7 @@
 
 ## Active Summary
 
-- observing: 15
+- observing: 16
 - reviewed: 1
 
 ## Active Changes
@@ -22,6 +22,7 @@
 - `release-beta-reference-positioning` - [changes/2026-05-06-release-beta-reference-positioning.md](changes/2026-05-06-release-beta-reference-positioning.md)
 - `roadmap-drift-doc-sync` - [changes/2026-05-07-roadmap-drift-doc-sync.md](changes/2026-05-07-roadmap-drift-doc-sync.md)
 - `track-ledger-readme-diff` - [changes/2026-05-07-track-ledger-readme-diff.md](changes/2026-05-07-track-ledger-readme-diff.md)
+- `automation-cadence-dev-version` - [changes/2026-05-08-automation-cadence-dev-version.md](changes/2026-05-08-automation-cadence-dev-version.md)
 
 ## Review Due
 

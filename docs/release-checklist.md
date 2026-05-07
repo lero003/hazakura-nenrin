@@ -3,6 +3,8 @@
 This checklist is for `v0.1.0-beta.1`, the pruning-ledger reference beta.
 
 Python packaging uses the PEP 440 version `0.1.0b1` for this beta.
+This file is preserved as the beta release checklist; current `main` may report
+a later development version.
 
 The beta is not meant to prove that Nenrin is a complete project management tool or AI agent framework. It should show whether the pruning-ledger model is understandable and useful when used directly or embedded in a development harness.
 
