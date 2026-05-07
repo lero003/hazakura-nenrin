@@ -127,6 +127,7 @@ Focus:
 - ~~Clarify `final_judgment` values: `keep`, `remove`, `merge`, `narrow`, `move_to_skill`, `move_to_handoff`, `move_to_checklist`, `keep_observing`.~~
 - ~~Add a path from review decisions back to change `status` and `impact`.~~ (`nenrin review --apply`)
 - Improve `debt` cleanup candidates without making them noisy; use `impact` and review evidence to avoid generic all-option advice.
+- When `brief` becomes a long flat list, prefer reviewable narrowing signals such as overdue review, recent updates, recurring failures, and tracked-file relevance before adding priority scores or heavier states.
 - Prefer reviewing a small number of lived records over adding more fields or states.
 
 Success means at least some improvements are pruned, narrowed, merged, or moved instead of only being added.
@@ -164,6 +165,8 @@ Output shape (active changes with Watch/Risk signals extracted from record body)
 ```
 
 Success means an agent can understand what to watch without reading every record.
+
+If real ledgers make `brief` too large to scan in one screen, polish the brief as an operational filter before adding broader automation: show the most urgent or recently touched active records, group by review/debt signal, or provide an explicit bounded mode. Do not turn this into a dashboard or scoring system.
 
 ## v0.5 - Diff Awareness
 
@@ -230,6 +233,7 @@ Early self-observation should focus on:
 - Do agents leave `TBD` content behind?
 - Do old changes stay `observing` forever?
 - Do `unknown` impacts become review decisions after enough related work?
+- Do record titles or generated filenames become long enough that agents avoid creating useful records?
 - Do remove, merge, and narrow decisions actually happen?
 - Do automations leave the ledger unchanged when there is no actionable review, failure, or hygiene signal?
 - Are `effective` judgments backed by behavior evidence rather than by the fact that a record was created?

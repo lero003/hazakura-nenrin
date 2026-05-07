@@ -55,6 +55,8 @@ For an existing ledger, read:
 3. Run `nenrin brief` to get active observation context in one screen
 4. Run `nenrin metrics` and `nenrin debt` when deciding what to review
 
+If `brief` is too long to act on, narrow from review due dates, recurring failures, recent related work, or `diff` relevance. Do not read every active record just to satisfy process.
+
 Keep observations short and evidence-oriented. Do not turn the ledger into a transcript archive.
 
 Treat record pressure as a signal. If a run creates another change record
