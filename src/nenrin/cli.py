@@ -82,7 +82,7 @@ def build_parser() -> argparse.ArgumentParser:
     review_parser.add_argument("--apply", action="store_true", help="Apply completed review judgments to related change records.")
     review_parser.set_defaults(func=cmd_review)
 
-    metrics_parser = subparsers.add_parser("metrics", help="Print metrics and update nenrin/metrics.md.")
+    metrics_parser = subparsers.add_parser("metrics", help="Print metrics and update generated outputs.")
     metrics_parser.add_argument("--no-write", action="store_true", help="Do not update metrics.md or index.md.")
     metrics_parser.set_defaults(func=cmd_metrics)
 
