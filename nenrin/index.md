@@ -2,7 +2,7 @@
 
 ## Active Summary
 
-- observing: 16
+- observing: 17
 - reviewed: 1
 
 ## Active Changes
@@ -23,6 +23,7 @@
 - `roadmap-drift-doc-sync` - [changes/2026-05-07-roadmap-drift-doc-sync.md](changes/2026-05-07-roadmap-drift-doc-sync.md)
 - `track-ledger-readme-diff` - [changes/2026-05-07-track-ledger-readme-diff.md](changes/2026-05-07-track-ledger-readme-diff.md)
 - `automation-cadence-dev-version` - [changes/2026-05-08-automation-cadence-dev-version.md](changes/2026-05-08-automation-cadence-dev-version.md)
+- `v0-2-release-gate-record-pressure` - [changes/2026-05-08-v0-2-release-gate-record-pressure.md](changes/2026-05-08-v0-2-release-gate-record-pressure.md)
 
 ## Review Due
 

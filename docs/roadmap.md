@@ -69,6 +69,12 @@ Success means:
 
 Goal: make the ledger easy for humans and coding agents to use without over-recording.
 
+This is an operation release, not a feature-count release. The central question
+is whether teams can record less, observe later, and prune with confidence. A
+growing count of `observing` / `unknown` change records with few observations is
+an acceptable early signal, but it should be treated as v0.2 risk evidence
+rather than a reason to add more commands.
+
 Focus:
 
 - Keep change and observation templates short enough to fill naturally.
@@ -81,6 +87,19 @@ Focus:
 - Keep no-failure placeholders out of recurring debt while preserving weak evidence as `unknown` or `partially_effective`.
 
 Success means the ledger is used during real work without becoming a chore or a stale checklist.
+
+Release `v0.2.0` only when real use shows that:
+
+- no-op after `diff`, `debt`, or `review` feels normal
+- agents can skip records for small wording or implementation-only changes
+- observations are created after related work without becoming task logs
+- at least one review decision has been applied or consciously kept observing
+- `metrics` and `debt` remain quiet unless there is actionable signal
+- `effective` is used only with behavior evidence
+- Nenrin-related docs changes can happen without creating unnecessary records
+
+For v0.2, prefer polishing these release gates over adding JSON output,
+dashboards, broader integrations, or AI-assisted judgment.
 
 ## v0.2.x - Foundation Hardening ~~(done)~~
 
@@ -204,6 +223,7 @@ Early self-observation should focus on:
 
 - Are change records created naturally?
 - Are observations forgotten?
+- Does the ledger drift toward change-record accumulation without enough later observation or review?
 - Does `review_after` produce useful review timing?
 - Do `metrics` and `debt` change behavior?
 - Are records growing too quickly?

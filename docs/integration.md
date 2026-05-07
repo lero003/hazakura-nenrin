@@ -18,6 +18,11 @@ The harness owns execution. Nenrin owns the lightweight judgment ledger.
 
 This boundary matters. Nenrin should not decide what command to run next, manage the task queue, control a conversation, or become a full agent framework. It should help the surrounding workflow remember what may matter later and prune what no longer earns its place.
 
+Machine-readable output may be added later for harness integration, but v0.2
+prioritizes human-readable, low-friction operation. Add structured output only
+when it reduces record pressure or review friction without turning Nenrin into
+the harness.
+
 ## Suggested Loop
 
 1. Before work, run `nenrin brief` only when prior decisions or unresolved concerns may affect the task.

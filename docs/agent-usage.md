@@ -44,6 +44,7 @@ Skip a Nenrin record for:
 - temporary instructions that belong in the current handoff only
 - duplicate records where an existing active change already covers the behavior
 - version history already captured clearly in `AGENTS.md`, changelogs, or roadmaps unless there is a specific future behavior to observe
+- `nenrin diff` findings that are small wording churn or docs maintenance with no durable behavior change
 
 ## First Files To Read
 
@@ -55,6 +56,11 @@ For an existing ledger, read:
 4. Run `nenrin metrics` and `nenrin debt` when deciding what to review
 
 Keep observations short and evidence-oriented. Do not turn the ledger into a transcript archive.
+
+Treat record pressure as a signal. If a run creates another change record
+without a clear future observation or review trigger, stop and ask whether the
+correct outcome is no-op, a short observation on an existing record, or a
+roadmap/docs clarification instead.
 
 ## Judgment Rules
 
