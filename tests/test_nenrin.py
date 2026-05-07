@@ -8,7 +8,7 @@ from contextlib import redirect_stderr, redirect_stdout
 from datetime import date
 from pathlib import Path
 
-from nenrin.cli import main, render_diff, tracked_file_matches, git_changed_paths
+from nenrin.cli import build_parser, main, render_diff, tracked_file_matches, git_changed_paths
 from nenrin.frontmatter import dump_frontmatter, load_config, parse_frontmatter
 from nenrin.records import (
     change_impact_counts,
@@ -349,6 +349,11 @@ class RecordTests(unittest.TestCase):
 
 
 class CliTests(unittest.TestCase):
+    def test_review_help_mentions_apply_flow(self) -> None:
+        help_text = build_parser().format_help()
+
+        self.assertIn("Show, create, or apply review records.", help_text)
+
     def test_init_change_observe_metrics(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp) / "nenrin"

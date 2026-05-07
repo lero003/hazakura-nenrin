@@ -77,7 +77,7 @@ def build_parser() -> argparse.ArgumentParser:
     )
     observe_parser.set_defaults(func=cmd_observe)
 
-    review_parser = subparsers.add_parser("review", help="Show overdue changes and create review templates.")
+    review_parser = subparsers.add_parser("review", help="Show, create, or apply review records.")
     review_parser.add_argument("--create", action="store_true", help="Create review templates for overdue changes.")
     review_parser.add_argument("--apply", action="store_true", help="Apply completed review judgments to related change records.")
     review_parser.set_defaults(func=cmd_review)
