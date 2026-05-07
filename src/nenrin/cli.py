@@ -159,7 +159,7 @@ def cmd_change(args: argparse.Namespace) -> int:
         ),
         encoding="utf-8",
     )
-    update_index(root)
+    update_generated_outputs(root)
     print(path)
     return 0
 
@@ -186,7 +186,7 @@ def cmd_observe(args: argparse.Namespace) -> int:
         ),
         encoding="utf-8",
     )
-    update_index(root)
+    update_generated_outputs(root)
     print(path)
     return 0
 
@@ -235,7 +235,7 @@ def cmd_review(args: argparse.Namespace) -> int:
             print(f"created {path}")
             created = True
         if created:
-            update_index(root)
+            update_generated_outputs(root)
 
     return 0
 
@@ -637,6 +637,12 @@ def update_index(root: Path) -> None:
         lines.append("- None")
     lines.append("")
     (root / "index.md").write_text("\n".join(lines), encoding="utf-8")
+
+
+def update_generated_outputs(root: Path) -> None:
+    records = load_records(root)
+    (root / "metrics.md").write_text(render_metrics(root, records), encoding="utf-8")
+    update_index(root)
 
 
 def ensure_initialized(root: Path) -> None:

@@ -382,6 +382,9 @@ class CliTests(unittest.TestCase):
             index_text = (root / "index.md").read_text(encoding="utf-8")
             self.assertIn("## Active Changes", index_text)
             self.assertIn("- `release-review` - [changes/", index_text)
+            metrics_text = (root / "metrics.md").read_text(encoding="utf-8")
+            self.assertIn("- Change records: 1", metrics_text)
+            self.assertIn("- Observation records: 1", metrics_text)
 
     def test_debt_runs_on_empty_ledger(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
