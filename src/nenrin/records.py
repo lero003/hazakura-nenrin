@@ -43,15 +43,19 @@ class OverdueChange:
     reasons: tuple[str, ...]
 
 
+@dataclass(frozen=True)
+class RecordShapeWarning:
+    path: Path
+    message: str
+
+
 def load_records(root: Path) -> list[Record]:
     records: list[Record] = []
     if not root.exists():
         return records
 
     for path in sorted(root.glob("**/*.md")):
-        if "templates" in path.relative_to(root).parts:
-            continue
-        if path.name in {"README.md", "index.md", "metrics.md"}:
+        if _should_skip_record_path(root, path):
             continue
         text = path.read_text(encoding="utf-8")
         metadata, body = parse_frontmatter(text)
@@ -59,6 +63,51 @@ def load_records(root: Path) -> list[Record]:
             records.append(Record(path=path, metadata=metadata, body=body))
 
     return records
+
+
+def record_shape_warnings(root: Path) -> list[RecordShapeWarning]:
+    warnings: list[RecordShapeWarning] = []
+    if not root.exists():
+        return warnings
+
+    for path in sorted(root.glob("**/*.md")):
+        if _should_skip_record_path(root, path):
+            continue
+
+        metadata, _body = parse_frontmatter(path.read_text(encoding="utf-8"))
+        if not metadata:
+            continue
+
+        relative_parts = path.relative_to(root).parts
+        if not relative_parts:
+            continue
+
+        collection = relative_parts[0]
+        record_type = str(metadata.get("type", "")).strip()
+        if collection in {"changes", "observations", "reviews"} and not record_type:
+            warnings.append(
+                RecordShapeWarning(
+                    path=path,
+                    message="frontmatter is missing `type`, so Nenrin ignores this file",
+                )
+            )
+            continue
+
+        if collection == "changes" and record_type == "nenrin_change":
+            missing = [
+                key
+                for key in ("status", "impact", "review_after")
+                if key not in metadata or metadata.get(key) in (None, "")
+            ]
+            if missing:
+                warnings.append(
+                    RecordShapeWarning(
+                        path=path,
+                        message=f"nenrin_change is missing {', '.join(missing)}",
+                    )
+                )
+
+    return warnings
 
 
 def changes(records: list[Record]) -> list[Record]:
@@ -193,3 +242,10 @@ def _as_list(value: Any) -> list[Any]:
 def _is_placeholder_signal(value: str) -> bool:
     normalized = value.strip().lower().rstrip(".。")
     return normalized in _PLACEHOLDER_FAILURE_SIGNALS
+
+
+def _should_skip_record_path(root: Path, path: Path) -> bool:
+    relative_parts = path.relative_to(root).parts
+    if "templates" in relative_parts:
+        return True
+    return path.name in {"README.md", "index.md", "metrics.md"}

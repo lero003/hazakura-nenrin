@@ -2,7 +2,7 @@
 
 ## Active Summary
 
-- observing: 17
+- observing: 18
 - reviewed: 1
 
 ## Active Changes
@@ -24,6 +24,7 @@
 - `track-ledger-readme-diff` - [changes/2026-05-07-track-ledger-readme-diff.md](changes/2026-05-07-track-ledger-readme-diff.md)
 - `automation-cadence-dev-version` - [changes/2026-05-08-automation-cadence-dev-version.md](changes/2026-05-08-automation-cadence-dev-version.md)
 - `v0-2-release-gate-record-pressure` - [changes/2026-05-08-v0-2-release-gate-record-pressure.md](changes/2026-05-08-v0-2-release-gate-record-pressure.md)
+- `record-shape-debt-warnings` - [changes/2026-05-09-record-shape-debt-warnings.md](changes/2026-05-09-record-shape-debt-warnings.md)
 
 ## Review Due
 

@@ -82,6 +82,8 @@ Focus:
 - Avoid duplicating version history that already belongs in `AGENTS.md`, changelogs, or roadmaps; record the expected future behavior and review trigger instead.
 - Keep `metrics` useful as an observation summary, not a scoring system.
 - Keep `debt` quiet enough that it points to reviewable cleanup.
+- Use `debt` to catch record-shape drift, such as frontmatter files under
+  `changes/` that Nenrin ignores because they are not typed records.
 - Keep optional `success_tags` and `failure_tags` useful for recurring signals.
 - Provide a minimal rule that can be pasted into `AGENTS.md` or similar agent instructions.
 - Keep no-failure placeholders out of recurring debt while preserving weak evidence as `unknown` or `partially_effective`.
@@ -97,6 +99,7 @@ Release `v0.2.0` only when real use shows that:
 - `metrics` and `debt` remain quiet unless there is actionable signal
 - `effective` is used only with behavior evidence
 - Nenrin-related docs changes can happen without creating unnecessary records
+- nonstandard record files are surfaced as cleanup, not silently ignored
 
 For v0.2, prefer polishing these release gates over adding JSON output,
 dashboards, broader integrations, or AI-assisted judgment.

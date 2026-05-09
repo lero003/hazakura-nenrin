@@ -16,6 +16,7 @@ from nenrin.records import (
     load_records,
     observation_impact_counts,
     overdue_changes,
+    record_shape_warnings,
     recurring_failure_signals,
     status_counts,
 )
@@ -301,6 +302,66 @@ class RecordTests(unittest.TestCase):
             self.assertFalse(any("stay-target" in c for c in candidates))
             self.assertFalse(any("already-removed" in c for c in candidates))
             self.assertFalse(any("already-narrowed" in c for c in candidates))
+
+    def test_record_shape_warnings_for_nonstandard_change_frontmatter(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp) / "nenrin"
+            write_record(
+                root / "changes" / "2026-05-09-model-decision.md",
+                {
+                    "id": "model-decision",
+                    "kind": "decision",
+                    "status": "active",
+                },
+                "# Decision\n",
+            )
+
+            warnings = record_shape_warnings(root)
+
+            self.assertEqual(len(warnings), 1)
+            self.assertIn("missing `type`", warnings[0].message)
+
+    def test_record_shape_warnings_for_incomplete_change_records(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp) / "nenrin"
+            write_record(
+                root / "changes" / "2026-05-09-incomplete.md",
+                {
+                    "type": "nenrin_change",
+                    "id": "incomplete",
+                    "date": "2026-05-09",
+                    "status": "observing",
+                },
+                "# Change\n",
+            )
+
+            warnings = record_shape_warnings(root)
+
+            self.assertEqual(len(warnings), 1)
+            self.assertIn("impact", warnings[0].message)
+            self.assertIn("review_after", warnings[0].message)
+
+    def test_debt_reports_record_shape_warnings(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp) / "nenrin"
+            self.assertEqual(main(["--root", str(root), "init"]), 0)
+            write_record(
+                root / "changes" / "2026-05-09-model-decision.md",
+                {
+                    "id": "model-decision",
+                    "kind": "decision",
+                    "status": "active",
+                },
+                "# Decision\n",
+            )
+
+            output = io.StringIO()
+            with redirect_stdout(output):
+                self.assertEqual(main(["--root", str(root), "debt"]), 0)
+
+            text = output.getvalue()
+            self.assertIn("## Record Shape Warnings", text)
+            self.assertIn("changes/2026-05-09-model-decision.md", text)
 
     def test_tracked_file_matches_globstar_and_shallow_paths(self) -> None:
         patterns = ["AGENTS.md", "docs/**/*.md", "skills/**/SKILL.md"]

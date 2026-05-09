@@ -20,6 +20,7 @@ from .records import (
     observations,
     observation_counts_by_change,
     overdue_changes,
+    record_shape_warnings,
     recurring_failure_signals,
     status_counts,
 )
@@ -256,7 +257,7 @@ def cmd_debt(args: argparse.Namespace) -> int:
     root = Path(args.root)
     ensure_initialized(root)
     records = load_records(root)
-    lines = render_debt(records)
+    lines = render_debt(records, root)
     print(lines.rstrip())
     return 0
 
@@ -269,6 +270,7 @@ def render_metrics(root: Path, records: list) -> str:
     observed = observation_counts_by_change(records)
     recurring = recurring_failure_signals(records)
     candidates = cleanup_candidates(records)
+    shape_warnings = record_shape_warnings(root)
 
     lines = ["# Nenrin Metrics", "", "## Summary", ""]
     lines.append(f"- Change records: {sum(statuses.values())}")
@@ -294,19 +296,23 @@ def render_metrics(root: Path, records: list) -> str:
 
     lines.append("## Suggested Actions")
     lines.append("")
-    if candidates:
+    if candidates or shape_warnings:
         for candidate in candidates:
             lines.append(f"- {candidate}")
+        for warning in shape_warnings:
+            relative_path = warning.path.relative_to(root)
+            lines.append(f"- {relative_path}: {warning.message}")
     else:
         lines.append("- None")
     lines.append("")
     return "\n".join(lines)
 
 
-def render_debt(records: list) -> str:
+def render_debt(records: list, root: Path | None = None) -> str:
     overdue = overdue_changes(records)
     recurring = recurring_failure_signals(records)
     candidates = cleanup_candidates(records)
+    shape_warnings = record_shape_warnings(root) if root is not None else []
 
     lines = ["# Improvement Debt", ""]
     lines.append("## Review Overdue")
@@ -332,6 +338,16 @@ def render_debt(records: list) -> str:
     if candidates:
         for candidate in candidates:
             lines.append(f"- {candidate}")
+    else:
+        lines.append("- None")
+    lines.append("")
+
+    lines.append("## Record Shape Warnings")
+    lines.append("")
+    if shape_warnings:
+        for warning in shape_warnings:
+            relative_path = warning.path.relative_to(root) if root is not None else warning.path
+            lines.append(f"- {relative_path}: {warning.message}")
     else:
         lines.append("- None")
     lines.append("")
