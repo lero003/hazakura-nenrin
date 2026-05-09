@@ -2,8 +2,8 @@
 type: nenrin_change
 id: ignore-placeholder-failure-signals
 date: 2026-05-03
-status: observing
-impact: unknown
+status: reviewed
+impact: effective
 related_files:
   - src/nenrin/records.py
   - tests/test_nenrin.py
@@ -46,4 +46,4 @@ Habitat's ledger accumulated enough observations for review, but `nenrin debt` t
 
 ## Result
 
-Unjudged.
+Reviewed effective on 2026-05-10.

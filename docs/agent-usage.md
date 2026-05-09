@@ -84,5 +84,6 @@ No-failure placeholders are not debt. They also are not proof of success. If the
 - `nenrin review` lists overdue changes.
 - `nenrin review --create` generates review templates for each overdue change.
 - `nenrin review --apply` reads completed reviews and updates the related change's `status` and `impact` based on `final_judgment` (e.g., `keep` → `reviewed`/`effective`, `remove` → `archived`/`ineffective`). Unsupported values warn and leave the change unchanged.
+- A review with `final_judgment: keep_observing` keeps the change active but resets the overdue window; later observations or elapsed days can make it due again.
 - `nenrin debt` also reports record-shape warnings for frontmatter files under `changes/`, `observations/`, or `reviews/` that Nenrin cannot treat as standard records, plus nonstandard `status` / `impact` values.
 - `nenrin diff` checks changed `tracked_files` paths and reports whether they have related active change records; it does not create records automatically.

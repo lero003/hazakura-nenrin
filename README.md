@@ -3,7 +3,7 @@
 Hazakura Nenrin is a small pruning ledger for development judgment.
 
 The latest published release is `v0.1.0-beta.1`. The `main` branch currently
-reports `0.2.0.dev1` while post-beta low-friction operation work is being
+reports `0.2.0.dev2` while post-beta low-friction operation work is being
 exercised.
 
 It helps humans and agents:

@@ -2,18 +2,18 @@
 
 ## Summary
 
-- Change records: 20
+- Change records: 21
 - Observation records: 4
-- Review overdue: 4
+- Review overdue: 0
 
 ## Status
 
 - observing: 19
-- reviewed: 1
+- reviewed: 2
 
 ## Change Impact
 
-- effective: 1
+- effective: 2
 - unknown: 19
 
 ## Observation Impact Judgment
@@ -23,10 +23,7 @@
 
 ## Review Overdue
 
-- generated-index-active-links (changes/2026-05-03-generated-index-active-links.md): 7 day(s) old, review_after.days=7
-- ignore-placeholder-failure-signals (changes/2026-05-03-ignore-placeholder-failure-signals.md): 7 day(s) old, review_after.days=7
-- pruning-automation-principles (changes/2026-05-03-pruning-automation-principles.md): 7 day(s) old, review_after.days=7
-- roadmap-ai-usable-from-start (changes/2026-05-03-roadmap-ai-usable-from-start.md): 7 day(s) old, review_after.days=7
+- None
 
 ## Recurring Failure Signals
 

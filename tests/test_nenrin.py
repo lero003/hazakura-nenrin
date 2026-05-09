@@ -175,6 +175,92 @@ class RecordTests(unittest.TestCase):
             self.assertEqual(overdue[0].change.id, "release")
             self.assertEqual(len(overdue[0].reasons), 2)
 
+    def test_keep_observing_review_resets_overdue_window(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp) / "nenrin"
+            write_record(
+                root / "changes" / "2026-05-01-release.md",
+                {
+                    "type": "nenrin_change",
+                    "id": "release",
+                    "date": "2026-05-01",
+                    "status": "observing",
+                    "impact": "unknown",
+                    "review_after": {"days": 2, "tasks": 1},
+                },
+                "# Change\n",
+            )
+            write_record(
+                root / "observations" / "2026-05-02-release.md",
+                {
+                    "type": "nenrin_observation",
+                    "id": "release-obs",
+                    "date": "2026-05-02",
+                    "related_changes": ["release"],
+                    "impact_judgment": "unknown",
+                },
+                "# Observation\n",
+            )
+            write_record(
+                root / "reviews" / "2026-05-03-review-release.md",
+                {
+                    "type": "nenrin_review",
+                    "id": "review-release",
+                    "date": "2026-05-03",
+                    "related_change": "release",
+                    "final_judgment": "keep_observing",
+                },
+                "# Review\n",
+            )
+
+            records = load_records(root)
+
+            self.assertEqual(overdue_changes(records, today=date(2026, 5, 4)), [])
+
+    def test_observations_after_keep_observing_review_can_make_change_overdue(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp) / "nenrin"
+            write_record(
+                root / "changes" / "2026-05-01-release.md",
+                {
+                    "type": "nenrin_change",
+                    "id": "release",
+                    "date": "2026-05-01",
+                    "status": "observing",
+                    "impact": "unknown",
+                    "review_after": {"days": 7, "tasks": 1},
+                },
+                "# Change\n",
+            )
+            write_record(
+                root / "reviews" / "2026-05-03-review-release.md",
+                {
+                    "type": "nenrin_review",
+                    "id": "review-release",
+                    "date": "2026-05-03",
+                    "related_change": "release",
+                    "final_judgment": "keep_observing",
+                },
+                "# Review\n",
+            )
+            write_record(
+                root / "observations" / "2026-05-04-release.md",
+                {
+                    "type": "nenrin_observation",
+                    "id": "release-obs",
+                    "date": "2026-05-04",
+                    "related_changes": ["release"],
+                    "impact_judgment": "unknown",
+                },
+                "# Observation\n",
+            )
+
+            overdue = overdue_changes(load_records(root), today=date(2026, 5, 4))
+
+            self.assertEqual(len(overdue), 1)
+            self.assertEqual(overdue[0].change.id, "release")
+            self.assertEqual(overdue[0].reasons, ("1 observation(s), review_after.tasks=1",))
+
     def test_recurring_failure_signals(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp) / "nenrin"
@@ -547,7 +633,7 @@ class CliTests(unittest.TestCase):
             with redirect_stdout(output):
                 self.assertEqual(main(["--root", str(root), "review", "--create"]), 0)
 
-            self.assertIn("review already exists for old-change; skipping", output.getvalue())
+            self.assertIn("No overdue changes.", output.getvalue())
             review_files = list((root / "reviews").glob("*.md"))
             self.assertEqual(len(review_files), 1)
 

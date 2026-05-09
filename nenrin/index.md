@@ -3,12 +3,11 @@
 ## Active Summary
 
 - observing: 19
-- reviewed: 1
+- reviewed: 2
 
 ## Active Changes
 
 - `generated-index-active-links` - [changes/2026-05-03-generated-index-active-links.md](changes/2026-05-03-generated-index-active-links.md)
-- `ignore-placeholder-failure-signals` - [changes/2026-05-03-ignore-placeholder-failure-signals.md](changes/2026-05-03-ignore-placeholder-failure-signals.md)
 - `pruning-automation-principles` - [changes/2026-05-03-pruning-automation-principles.md](changes/2026-05-03-pruning-automation-principles.md)
 - `roadmap-ai-usable-from-start` - [changes/2026-05-03-roadmap-ai-usable-from-start.md](changes/2026-05-03-roadmap-ai-usable-from-start.md)
 - `agents-roadmap-v0-3-x-update` - [changes/2026-05-04-agents-roadmap-v0-3-x-update.md](changes/2026-05-04-agents-roadmap-v0-3-x-update.md)
@@ -26,10 +25,8 @@
 - `v0-2-release-gate-record-pressure` - [changes/2026-05-08-v0-2-release-gate-record-pressure.md](changes/2026-05-08-v0-2-release-gate-record-pressure.md)
 - `record-shape-debt-warnings` - [changes/2026-05-09-record-shape-debt-warnings.md](changes/2026-05-09-record-shape-debt-warnings.md)
 - `invalid-state-debt-warnings` - [changes/2026-05-10-invalid-state-debt-warnings.md](changes/2026-05-10-invalid-state-debt-warnings.md)
+- `keep-observing-review-window` - [changes/2026-05-10-keep-observing-review-window.md](changes/2026-05-10-keep-observing-review-window.md)
 
 ## Review Due
 
-- generated-index-active-links: 7 day(s) old, review_after.days=7
-- ignore-placeholder-failure-signals: 7 day(s) old, review_after.days=7
-- pruning-automation-principles: 7 day(s) old, review_after.days=7
-- roadmap-ai-usable-from-start: 7 day(s) old, review_after.days=7
+- None

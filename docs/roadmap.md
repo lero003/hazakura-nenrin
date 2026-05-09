@@ -38,7 +38,7 @@ Nenrin should not try to beat `AGENTS.md` at immediate instruction or become a s
 Goal: present a low-friction pruning-ledger model as a usable reference implementation.
 
 Status: `v0.1.0-beta.1` is published as an immutable prerelease. Current `main`
-uses the development version `0.2.0.dev1` while the next low-friction operation
+uses the development version `0.2.0.dev2` while the next low-friction operation
 cycle is exercised.
 
 Current scope:

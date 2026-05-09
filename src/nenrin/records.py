@@ -161,20 +161,50 @@ def observation_impact_counts(records: list[Record]) -> Counter[str]:
     )
 
 
-def observation_counts_by_change(records: list[Record]) -> Counter[str]:
+def observation_counts_by_change(
+    records: list[Record],
+    after_dates: dict[str, date] | None = None,
+) -> Counter[str]:
+    after_dates = after_dates or {}
     counter: Counter[str] = Counter()
     for record in observations(records):
         related = record.metadata.get("related_changes", [])
         if isinstance(related, str):
             related = [related]
         for change_id in related:
-            counter[str(change_id)] += 1
+            change_id = str(change_id)
+            cutoff = after_dates.get(change_id)
+            if cutoff is not None:
+                observation_date = _parse_date(str(record.metadata.get("date", "")))
+                if observation_date is None or observation_date <= cutoff:
+                    continue
+            counter[change_id] += 1
     return counter
+
+
+def keep_observing_review_dates(records: list[Record]) -> dict[str, date]:
+    latest: dict[str, date] = {}
+    for record in records:
+        if record.type != "nenrin_review":
+            continue
+        if str(record.metadata.get("final_judgment", "")).strip() != "keep_observing":
+            continue
+
+        related_change = str(record.metadata.get("related_change", "")).strip()
+        review_date = _parse_date(str(record.metadata.get("date", "")))
+        if not related_change or review_date is None:
+            continue
+
+        previous = latest.get(related_change)
+        if previous is None or review_date > previous:
+            latest[related_change] = review_date
+    return latest
 
 
 def overdue_changes(records: list[Record], today: date | None = None) -> list[OverdueChange]:
     today = today or date.today()
-    observed_counts = observation_counts_by_change(records)
+    latest_reviews = keep_observing_review_dates(records)
+    observed_counts = observation_counts_by_change(records, after_dates=latest_reviews)
     overdue: list[OverdueChange] = []
 
     for change in changes(records):
@@ -189,9 +219,10 @@ def overdue_changes(records: list[Record], today: date | None = None) -> list[Ov
         due_days = _int_or_none(review_after.get("days"))
         due_tasks = _int_or_none(review_after.get("tasks"))
         change_date = _parse_date(str(change.metadata.get("date", "")))
+        baseline_date = latest_reviews.get(change.id, change_date)
 
-        if due_days is not None and change_date is not None:
-            age_days = (today - change_date).days
+        if due_days is not None and baseline_date is not None:
+            age_days = (today - baseline_date).days
             if age_days >= due_days:
                 reasons.append(f"{age_days} day(s) old, review_after.days={due_days}")
 
