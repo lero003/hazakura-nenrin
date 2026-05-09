@@ -10,6 +10,7 @@ from .frontmatter import parse_frontmatter
 
 
 VALID_IMPACTS = {"unknown", "effective", "partially_effective", "ineffective", "harmful"}
+VALID_STATUSES = {"draft", "observing", "ready_for_review", "reviewed", "archived"}
 
 _PLACEHOLDER_FAILURE_SIGNALS = {
     "none",
@@ -104,6 +105,34 @@ def record_shape_warnings(root: Path) -> list[RecordShapeWarning]:
                     RecordShapeWarning(
                         path=path,
                         message=f"nenrin_change is missing {', '.join(missing)}",
+                    )
+                )
+
+            status = str(metadata.get("status", "")).strip()
+            if status and status not in VALID_STATUSES:
+                warnings.append(
+                    RecordShapeWarning(
+                        path=path,
+                        message=f"nenrin_change has nonstandard status `{status}`",
+                    )
+                )
+
+            impact = str(metadata.get("impact", "")).strip()
+            if impact and impact not in VALID_IMPACTS:
+                warnings.append(
+                    RecordShapeWarning(
+                        path=path,
+                        message=f"nenrin_change has nonstandard impact `{impact}`",
+                    )
+                )
+
+        if collection == "observations" and record_type == "nenrin_observation":
+            judgment = str(metadata.get("impact_judgment", "")).strip()
+            if judgment and judgment not in VALID_IMPACTS:
+                warnings.append(
+                    RecordShapeWarning(
+                        path=path,
+                        message=f"nenrin_observation has nonstandard impact_judgment `{judgment}`",
                     )
                 )
 

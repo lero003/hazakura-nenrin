@@ -341,6 +341,47 @@ class RecordTests(unittest.TestCase):
             self.assertIn("impact", warnings[0].message)
             self.assertIn("review_after", warnings[0].message)
 
+    def test_record_shape_warnings_for_nonstandard_change_state(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp) / "nenrin"
+            write_record(
+                root / "changes" / "2026-05-10-active-model.md",
+                {
+                    "type": "nenrin_change",
+                    "id": "active-model",
+                    "date": "2026-05-10",
+                    "status": "active",
+                    "impact": "positive",
+                    "review_after": {"tasks": 3, "days": 7},
+                },
+                "# Change\n",
+            )
+
+            messages = [warning.message for warning in record_shape_warnings(root)]
+
+            self.assertIn("nenrin_change has nonstandard status `active`", messages)
+            self.assertIn("nenrin_change has nonstandard impact `positive`", messages)
+
+    def test_record_shape_warnings_for_nonstandard_observation_impact(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp) / "nenrin"
+            write_record(
+                root / "observations" / "2026-05-10-obs.md",
+                {
+                    "type": "nenrin_observation",
+                    "id": "obs",
+                    "date": "2026-05-10",
+                    "related_changes": ["active-model"],
+                    "impact_judgment": "validated",
+                },
+                "# Observation\n",
+            )
+
+            warnings = record_shape_warnings(root)
+
+            self.assertEqual(len(warnings), 1)
+            self.assertIn("nonstandard impact_judgment `validated`", warnings[0].message)
+
     def test_debt_reports_record_shape_warnings(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp) / "nenrin"

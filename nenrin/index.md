@@ -2,7 +2,7 @@
 
 ## Active Summary
 
-- observing: 18
+- observing: 19
 - reviewed: 1
 
 ## Active Changes
@@ -25,7 +25,11 @@
 - `automation-cadence-dev-version` - [changes/2026-05-08-automation-cadence-dev-version.md](changes/2026-05-08-automation-cadence-dev-version.md)
 - `v0-2-release-gate-record-pressure` - [changes/2026-05-08-v0-2-release-gate-record-pressure.md](changes/2026-05-08-v0-2-release-gate-record-pressure.md)
 - `record-shape-debt-warnings` - [changes/2026-05-09-record-shape-debt-warnings.md](changes/2026-05-09-record-shape-debt-warnings.md)
+- `invalid-state-debt-warnings` - [changes/2026-05-10-invalid-state-debt-warnings.md](changes/2026-05-10-invalid-state-debt-warnings.md)
 
 ## Review Due
 
-- None
+- generated-index-active-links: 7 day(s) old, review_after.days=7
+- ignore-placeholder-failure-signals: 7 day(s) old, review_after.days=7
+- pruning-automation-principles: 7 day(s) old, review_after.days=7
+- roadmap-ai-usable-from-start: 7 day(s) old, review_after.days=7

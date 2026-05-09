@@ -38,7 +38,7 @@ Nenrin should not try to beat `AGENTS.md` at immediate instruction or become a s
 Goal: present a low-friction pruning-ledger model as a usable reference implementation.
 
 Status: `v0.1.0-beta.1` is published as an immutable prerelease. Current `main`
-uses the development version `0.2.0.dev0` while the next low-friction operation
+uses the development version `0.2.0.dev1` while the next low-friction operation
 cycle is exercised.
 
 Current scope:
@@ -83,7 +83,8 @@ Focus:
 - Keep `metrics` useful as an observation summary, not a scoring system.
 - Keep `debt` quiet enough that it points to reviewable cleanup.
 - Use `debt` to catch record-shape drift, such as frontmatter files under
-  `changes/` that Nenrin ignores because they are not typed records.
+  `changes/` that Nenrin ignores because they are not typed records, or records
+  that use nonstandard `status` / `impact` values.
 - Keep optional `success_tags` and `failure_tags` useful for recurring signals.
 - Provide a minimal rule that can be pasted into `AGENTS.md` or similar agent instructions.
 - Keep no-failure placeholders out of recurring debt while preserving weak evidence as `unknown` or `partially_effective`.
