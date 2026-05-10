@@ -2,8 +2,8 @@
 type: nenrin_change
 id: roadmap-tool-role-boundaries
 date: 2026-05-04
-status: observing
-impact: unknown
+status: reviewed
+impact: effective
 related_files:
   - docs/roadmap.md
   - docs/philosophy.md

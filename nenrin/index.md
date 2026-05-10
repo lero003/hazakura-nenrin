@@ -2,8 +2,8 @@
 
 ## Active Summary
 
-- observing: 19
-- reviewed: 2
+- observing: 18
+- reviewed: 3
 
 ## Active Changes
 
@@ -12,7 +12,6 @@
 - `roadmap-ai-usable-from-start` - [changes/2026-05-03-roadmap-ai-usable-from-start.md](changes/2026-05-03-roadmap-ai-usable-from-start.md)
 - `agents-roadmap-v0-3-x-update` - [changes/2026-05-04-agents-roadmap-v0-3-x-update.md](changes/2026-05-04-agents-roadmap-v0-3-x-update.md)
 - `clarify-tool-roles-agents-primary` - [changes/2026-05-04-clarify-tool-roles-agents-primary.md](changes/2026-05-04-clarify-tool-roles-agents-primary.md)
-- `roadmap-tool-role-boundaries` - [changes/2026-05-04-roadmap-tool-role-boundaries.md](changes/2026-05-04-roadmap-tool-role-boundaries.md)
 - `v0-3-x-stabilization` - [changes/2026-05-04-v0-3-x-stabilization.md](changes/2026-05-04-v0-3-x-stabilization.md)
 - `v0-4-remote-agent-workflow` - [changes/2026-05-04-v0-4-remote-agent-workflow.md](changes/2026-05-04-v0-4-remote-agent-workflow.md)
 - `v0-5-compaction-summary-decisions` - [changes/2026-05-04-v0-5-compaction-summary-decisions.md](changes/2026-05-04-v0-5-compaction-summary-decisions.md)
@@ -29,4 +28,6 @@
 
 ## Review Due
 
-- None
+- agents-roadmap-v0-3-x-update: 7 day(s) old, review_after.days=7
+- v0-3-x-stabilization: 7 day(s) old, review_after.days=7
+- v0-4-remote-agent-workflow: 7 day(s) old, review_after.days=7
