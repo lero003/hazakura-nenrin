@@ -2,8 +2,8 @@
 type: nenrin_change
 id: v0-6-cloudflare-backend-abstraction
 date: 2026-05-04
-status: observing
-impact: unknown
+status: archived
+impact: ineffective
 related_files:
   - ../../hazakura-dev-bbs/packages/git-backend/src/index.ts
   - ../../hazakura-dev-bbs/packages/indexer/src/index.ts

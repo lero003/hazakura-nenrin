@@ -2,8 +2,8 @@
 type: nenrin_change
 id: agents-roadmap-v0-3-x-update
 date: 2026-05-04
-status: observing
-impact: unknown
+status: archived
+impact: ineffective
 related_files:
   - ../../hazakura-dev-bbs/AGENTS.md
   - ../../hazakura-dev-bbs/ROADMAP.md

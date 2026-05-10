@@ -2,8 +2,8 @@
 type: nenrin_change
 id: v0-5-compaction-summary-decisions
 date: 2026-05-04
-status: observing
-impact: unknown
+status: archived
+impact: ineffective
 related_files:
   - ../../hazakura-dev-bbs/packages/core/src/index.ts
   - ../../hazakura-dev-bbs/apps/cli/src/index.ts

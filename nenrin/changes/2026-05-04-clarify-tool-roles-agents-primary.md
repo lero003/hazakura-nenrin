@@ -2,8 +2,8 @@
 type: nenrin_change
 id: clarify-tool-roles-agents-primary
 date: 2026-05-04
-status: observing
-impact: unknown
+status: archived
+impact: ineffective
 related_files:
   - ../../hazakura-dev-bbs/AGENTS.md
   - ../../hazakura-dev-bbs/docs/development.md
