@@ -428,21 +428,6 @@ def render_brief(root: Path, records: list) -> str:
     recurring = recurring_failure_signals(records)
 
     lines = ["# Nenrin Brief", ""]
-    lines.append("## Active Observations")
-    lines.append("")
-    if active_changes:
-        for change in active_changes:
-            lines.append(f"- {change.id}")
-            watch = _extract_body_item(change.body, "Expected Behavior")
-            if watch:
-                lines.append(f"  - Watch: {watch}")
-            risk = _extract_body_item(change.body, "Failure Signals")
-            if risk:
-                lines.append(f"  - Risk: {risk}")
-    else:
-        lines.append("- None")
-    lines.append("")
-
     lines.append("## Review Due")
     lines.append("")
     if overdue:
@@ -457,6 +442,21 @@ def render_brief(root: Path, records: list) -> str:
     if recurring:
         for signal, count in recurring.most_common():
             lines.append(f"- {signal} ({count}x)")
+    else:
+        lines.append("- None")
+    lines.append("")
+
+    lines.append("## Active Observations")
+    lines.append("")
+    if active_changes:
+        for change in active_changes:
+            lines.append(f"- {change.id}")
+            watch = _extract_body_item(change.body, "Expected Behavior")
+            if watch:
+                lines.append(f"  - Watch: {watch}")
+            risk = _extract_body_item(change.body, "Failure Signals")
+            if risk:
+                lines.append(f"  - Risk: {risk}")
     else:
         lines.append("- None")
     lines.append("")

@@ -719,6 +719,23 @@ class CliTests(unittest.TestCase):
 
             self.assertIn(change_id, output.getvalue())
 
+    def test_brief_puts_review_due_before_active_observations(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp) / "nenrin"
+
+            self.assertEqual(main(["--root", str(root), "init"]), 0)
+            main(["--root", str(root), "change", "Brief Order", "--review-days", "0"])
+
+            output = io.StringIO()
+            with redirect_stdout(output):
+                self.assertEqual(main(["--root", str(root), "brief"]), 0)
+
+            text = output.getvalue()
+            self.assertLess(
+                text.index("## Review Due"),
+                text.index("## Active Observations"),
+            )
+
     def test_review_apply_updates_change_status_and_impact(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp) / "nenrin"

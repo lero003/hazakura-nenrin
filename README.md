@@ -106,7 +106,7 @@ All commands accept `--root <path>` to point to a non-default ledger directory (
 
 `nenrin review` lists overdue changes. `--create` generates review templates for each overdue change. `--apply` propagates completed review judgments to related change records.
 
-`nenrin brief` prints the active observation context for the next agent session (Watch/Risk signals, review deadlines, recurring failures) without requiring the agent to read every record.
+`nenrin brief` prints review deadlines, recurring failures, and active observation context for the next agent session without requiring the agent to read every record.
 
 `nenrin diff` compares the current Git working tree with `tracked_files` in `config.yaml` and shows whether changed agent-facing files already have related active change records. It reports omissions but does not create records automatically.
 
