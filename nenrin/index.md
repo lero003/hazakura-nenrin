@@ -3,7 +3,7 @@
 ## Active Summary
 
 - archived: 6
-- observing: 12
+- observing: 13
 - reviewed: 3
 
 ## Active Changes
@@ -20,6 +20,7 @@
 - `record-shape-debt-warnings` - [changes/2026-05-09-record-shape-debt-warnings.md](changes/2026-05-09-record-shape-debt-warnings.md)
 - `invalid-state-debt-warnings` - [changes/2026-05-10-invalid-state-debt-warnings.md](changes/2026-05-10-invalid-state-debt-warnings.md)
 - `keep-observing-review-window` - [changes/2026-05-10-keep-observing-review-window.md](changes/2026-05-10-keep-observing-review-window.md)
+- `brief-active-observation-limit` - [changes/2026-05-11-brief-active-observation-limit.md](changes/2026-05-11-brief-active-observation-limit.md)
 
 ## Review Due
 

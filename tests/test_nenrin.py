@@ -736,6 +736,40 @@ class CliTests(unittest.TestCase):
                 text.index("## Active Observations"),
             )
 
+    def test_brief_limits_active_observations_by_default(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp) / "nenrin"
+
+            self.assertEqual(main(["--root", str(root), "init"]), 0)
+            for index in range(21):
+                main(["--root", str(root), "change", f"Brief Limit {index}"])
+
+            output = io.StringIO()
+            with redirect_stdout(output):
+                self.assertEqual(main(["--root", str(root), "brief"]), 0)
+
+            text = output.getvalue()
+            brief_lines = text.splitlines()
+            active_lines = [line for line in brief_lines if line.startswith("- brief-limit-")]
+            self.assertEqual(20, len(active_lines))
+            self.assertIn("1 more active observation(s) omitted", text)
+
+    def test_brief_active_limit_zero_shows_all_active_observations(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp) / "nenrin"
+
+            self.assertEqual(main(["--root", str(root), "init"]), 0)
+            for index in range(21):
+                main(["--root", str(root), "change", f"Brief All {index}"])
+
+            output = io.StringIO()
+            with redirect_stdout(output):
+                self.assertEqual(main(["--root", str(root), "brief", "--active-limit", "0"]), 0)
+
+            text = output.getvalue()
+            self.assertIn("- brief-all-20", text)
+            self.assertNotIn("more active observation(s) omitted", text)
+
     def test_review_apply_updates_change_status_and_impact(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp) / "nenrin"

@@ -91,6 +91,12 @@ def build_parser() -> argparse.ArgumentParser:
     debt_parser.set_defaults(func=cmd_debt)
 
     brief_parser = subparsers.add_parser("brief", help="Print active observation context for the next agent session.")
+    brief_parser.add_argument(
+        "--active-limit",
+        type=int,
+        default=20,
+        help="Maximum active observation records to show. Use 0 to show all. Defaults to 20.",
+    )
     brief_parser.set_defaults(func=cmd_brief)
 
     diff_parser = subparsers.add_parser("diff", help="Show tracked agent-facing working tree changes.")
@@ -414,12 +420,12 @@ def cmd_brief(args: argparse.Namespace) -> int:
     root = Path(args.root)
     ensure_initialized(root)
     records = load_records(root)
-    lines = render_brief(root, records)
+    lines = render_brief(root, records, active_limit=args.active_limit)
     print(lines.rstrip())
     return 0
 
 
-def render_brief(root: Path, records: list) -> str:
+def render_brief(root: Path, records: list, active_limit: int = 20) -> str:
     active_changes = [
         r for r in changes(records)
         if r.metadata.get("status") in {"observing", "ready_for_review"}
@@ -449,7 +455,8 @@ def render_brief(root: Path, records: list) -> str:
     lines.append("## Active Observations")
     lines.append("")
     if active_changes:
-        for change in active_changes:
+        visible_changes = active_changes if active_limit <= 0 else active_changes[:active_limit]
+        for change in visible_changes:
             lines.append(f"- {change.id}")
             watch = _extract_body_item(change.body, "Expected Behavior")
             if watch:
@@ -457,6 +464,9 @@ def render_brief(root: Path, records: list) -> str:
             risk = _extract_body_item(change.body, "Failure Signals")
             if risk:
                 lines.append(f"  - Risk: {risk}")
+        omitted = len(active_changes) - len(visible_changes)
+        if omitted > 0:
+            lines.append(f"- ... {omitted} more active observation(s) omitted; use `nenrin brief --active-limit 0` to show all.")
     else:
         lines.append("- None")
     lines.append("")
