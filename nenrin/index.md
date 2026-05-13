@@ -3,15 +3,14 @@
 ## Active Summary
 
 - archived: 6
-- observing: 13
-- reviewed: 3
+- observing: 12
+- reviewed: 4
 
 ## Active Changes
 
 - `generated-index-active-links` - [changes/2026-05-03-generated-index-active-links.md](changes/2026-05-03-generated-index-active-links.md)
 - `pruning-automation-principles` - [changes/2026-05-03-pruning-automation-principles.md](changes/2026-05-03-pruning-automation-principles.md)
 - `roadmap-ai-usable-from-start` - [changes/2026-05-03-roadmap-ai-usable-from-start.md](changes/2026-05-03-roadmap-ai-usable-from-start.md)
-- `roadmap-foundation-hardening` - [changes/2026-05-05-roadmap-foundation-hardening.md](changes/2026-05-05-roadmap-foundation-hardening.md)
 - `release-beta-reference-positioning` - [changes/2026-05-06-release-beta-reference-positioning.md](changes/2026-05-06-release-beta-reference-positioning.md)
 - `roadmap-drift-doc-sync` - [changes/2026-05-07-roadmap-drift-doc-sync.md](changes/2026-05-07-roadmap-drift-doc-sync.md)
 - `track-ledger-readme-diff` - [changes/2026-05-07-track-ledger-readme-diff.md](changes/2026-05-07-track-ledger-readme-diff.md)

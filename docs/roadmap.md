@@ -97,6 +97,8 @@ Release `v0.2.0` only when real use shows that:
 - agents can skip records for small wording or implementation-only changes
 - observations are created after related work without becoming task logs
 - at least one review decision has been applied or consciously kept observing
+- `keep_observing` reviews narrow what is still being watched instead of
+  becoming a place to park vague unfinished work
 - `metrics` and `debt` remain quiet unless there is actionable signal
 - `effective` is used only with behavior evidence
 - Nenrin-related docs changes can happen without creating unnecessary records
@@ -137,6 +139,10 @@ Focus:
 Success means at least some improvements are pruned, narrowed, merged, or moved instead of only being added.
 
 Automation in this phase should act as a pruning pass, not a work generator. It should prioritize overdue review, recurring failure verification, active-record hygiene, evidence quality, and no-op when nothing needs to close.
+
+When a review keeps a record observing, it should say what evidence remains
+unproven and what is now out of scope. Otherwise `keep_observing` can become a
+quiet backlog instead of a review decision.
 
 ## v0.4 - Briefing ~~(done)~~
 

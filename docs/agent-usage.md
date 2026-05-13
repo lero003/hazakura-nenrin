@@ -83,6 +83,11 @@ Reading a record, creating a record, or noticing a possible issue is not enough 
 
 No-failure placeholders are not debt. They also are not proof of success. If there is no failure but no behavior evidence either, keep observing rather than upgrading the judgment.
 
+When using `keep_observing`, narrow the remaining question in the review body:
+name the evidence still missing and the scope that should not expand. A
+keep-observing review should reset the review window, not become a vague
+parking place for unfinished work.
+
 ## Review Commands
 
 - `nenrin review` lists overdue changes.
