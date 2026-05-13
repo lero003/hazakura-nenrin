@@ -33,6 +33,12 @@ Current self-use suggests this working split:
 
 Nenrin should not try to beat `AGENTS.md` at immediate instruction or become a second version history. Its value should be judged after several tasks, when `observing` and `unknown` records can be reviewed against behavior evidence and pruned if `AGENTS.md` already carries the durable context well enough.
 
+When Habitat output conflicts with documented or verified repository commands,
+prefer the working repository command and treat the mismatch as evidence to
+review. The carry-back should usually be a small metadata or documentation fix,
+a Nenrin observation, or a Habitat-side issue; do not let a generated preferred
+command override repo-local validation truth by itself.
+
 ## v0.1 - Pruning Ledger Reference Beta
 
 Goal: present a low-friction pruning-ledger model as a usable reference implementation.

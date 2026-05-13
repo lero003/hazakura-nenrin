@@ -21,6 +21,8 @@ Create or update a Nenrin change record when you make a durable change to:
 - roadmap or release checklist
 - QA gates or review criteria
 - recurring automation or workflow guidance
+- package, validation, or project metadata when it changes future agent command
+  selection
 
 When implementation, verification, or real use shows that the roadmap or
 related docs no longer match the best next direction, update the relevant doc

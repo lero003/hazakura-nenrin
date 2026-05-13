@@ -5,6 +5,7 @@ tracked_files:
   - AGENTS.md
   - CLAUDE.md
   - README.md
+  - pyproject.toml
   - nenrin/README.md
   - docs/**/*.md
   - skills/**/SKILL.md
