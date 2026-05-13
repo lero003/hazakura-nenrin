@@ -1,5 +1,9 @@
 # Hazakura Nenrin
 
+<p align="center">
+  <img src="docs/assets/hazakura-nenrin-logo.png" alt="Hazakura Nenrin logo" width="720">
+</p>
+
 Hazakura Nenrin is a small pruning ledger for development judgment.
 
 The latest published release is `v0.1.0-beta.1`. The `main` branch currently
