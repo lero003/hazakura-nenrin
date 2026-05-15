@@ -3,8 +3,8 @@
 ## Active Summary
 
 - archived: 6
-- observing: 13
-- reviewed: 4
+- observing: 12
+- reviewed: 5
 
 ## Active Changes
 
@@ -14,7 +14,6 @@
 - `release-beta-reference-positioning` - [changes/2026-05-06-release-beta-reference-positioning.md](changes/2026-05-06-release-beta-reference-positioning.md)
 - `roadmap-drift-doc-sync` - [changes/2026-05-07-roadmap-drift-doc-sync.md](changes/2026-05-07-roadmap-drift-doc-sync.md)
 - `track-ledger-readme-diff` - [changes/2026-05-07-track-ledger-readme-diff.md](changes/2026-05-07-track-ledger-readme-diff.md)
-- `automation-cadence-dev-version` - [changes/2026-05-08-automation-cadence-dev-version.md](changes/2026-05-08-automation-cadence-dev-version.md)
 - `v0-2-release-gate-record-pressure` - [changes/2026-05-08-v0-2-release-gate-record-pressure.md](changes/2026-05-08-v0-2-release-gate-record-pressure.md)
 - `record-shape-debt-warnings` - [changes/2026-05-09-record-shape-debt-warnings.md](changes/2026-05-09-record-shape-debt-warnings.md)
 - `invalid-state-debt-warnings` - [changes/2026-05-10-invalid-state-debt-warnings.md](changes/2026-05-10-invalid-state-debt-warnings.md)

@@ -2,8 +2,8 @@
 type: nenrin_change
 id: automation-cadence-dev-version
 date: 2026-05-08
-status: observing
-impact: unknown
+status: reviewed
+impact: effective
 related_files:
   - docs/roadmap.md
   - docs/release-checklist.md

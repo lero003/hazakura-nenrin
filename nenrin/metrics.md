@@ -9,14 +9,14 @@
 ## Status
 
 - archived: 6
-- observing: 13
-- reviewed: 4
+- observing: 12
+- reviewed: 5
 
 ## Change Impact
 
-- effective: 4
+- effective: 5
 - ineffective: 6
-- unknown: 13
+- unknown: 12
 
 ## Observation Impact Judgment
 
