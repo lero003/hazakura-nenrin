@@ -6,6 +6,10 @@ Command examples below assume the `nenrin` CLI is already installed or available
 on `PATH`. In a fresh checkout, use `uv run nenrin <command>` or install the
 editable package first.
 
+If a repository is deciding how much Nenrin to adopt, start with
+[AI Agent Adoption Guide](adoption_guide.md). Use the lowest level that reduces
+future misunderstanding; do not adopt a full ledger just to prove process.
+
 ## Minimal Rule
 
 ```md

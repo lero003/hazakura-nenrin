@@ -2,6 +2,10 @@
 
 Nenrin can be used directly as a CLI, but it is also designed to be called from a development harness.
 
+For repositories that are not ready for harness integration, start with
+[AI Agent Adoption Guide](adoption_guide.md) and adopt only the smallest useful
+level.
+
 The examples below use `nenrin` for the installed command. A harness running
 from an uninstalled checkout should call `uv run nenrin <command>` or run the
 module with `PYTHONPATH=src python3 -m nenrin <command>`.

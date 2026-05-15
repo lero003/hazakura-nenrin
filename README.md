@@ -19,6 +19,10 @@ It helps humans and agents:
 
 Nenrin can be used as a standalone CLI, but it is also intended as a reference implementation for development harnesses that want low-friction recall, review, and pruning. The harness owns execution. Nenrin owns the lightweight judgment ledger.
 
+For partial adoption in an existing repository, see
+[AI Agent Adoption Guide](docs/adoption_guide.md). Nenrin can start as a small
+agent-facing rule before a project adopts a full ledger or harness integration.
+
 ## What Nenrin Is Not
 
 Nenrin is not:
@@ -59,6 +63,8 @@ See `examples/nenrin/` for a tiny sample ledger.
 See `docs/roadmap.md` for the current direction. The roadmap is intentionally evidence-led: Nenrin should evolve through observed use, not through a large feature checklist.
 
 See `docs/integration.md` for guidance on calling Nenrin from a development harness.
+
+See `docs/adoption_guide.md` for choosing the smallest useful adoption level.
 
 See `docs/philosophy.md` for the early product stance behind Nenrin.
 
