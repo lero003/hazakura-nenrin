@@ -18,6 +18,9 @@ Nenrin should evolve through observed use. Do not add automation before the manu
 - Keep states small and put confidence in review evidence, not in more status values.
 - `AGENTS.md`, roadmap, and development docs remain the operational source of truth for current work; Nenrin should test whether changes to those sources earned their place.
 - Habitat is a strong proving ground, but Nenrin should not depend on Habitat.
+- External project use should stay read-only and act as a carry-back filter:
+  bring home at most one Nenrin-side lesson when another repository exposes
+  record pressure, stale guidance, or a changed command decision.
 
 For the broader product stance, see [Product Philosophy](philosophy.md).
 

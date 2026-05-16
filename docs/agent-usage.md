@@ -74,6 +74,27 @@ without a clear future observation or review trigger, stop and ask whether the
 correct outcome is no-op, a short observation on an existing record, or a
 roadmap/docs clarification instead.
 
+## External Use Intake
+
+When Nenrin development automation checks another repository, keep the visit
+read-only and ask whether the external use changes a Nenrin decision. Good
+signals include a prior record changing the next command, recurring no-op or
+review pressure, docs/roadmap drift, command-decision mismatch, evidence
+freshness problems, or repeated blocker handling that should narrow future
+Nenrin guidance.
+
+Do not copy raw external logs into the ledger, mutate the observed repository,
+or turn its backlog into Nenrin work. Carry back at most one durable
+Nenrin-side improvement: a docs clarification, prompt adjustment, observation,
+review decision, CLI fix, or an explicit no-op report.
+
+For `hazakura-ai-mobile`, useful read-only signals include device
+verification blockers, import/export boundary language, local-only asset
+handling, UI/design gates, and whether Habitat command guidance remains fresh
+enough to influence the next command. Treat those as evidence about record
+pressure and pruning behavior, not as a reason for Nenrin automation to edit
+the mobile app.
+
 ## Judgment Rules
 
 Keep status and impact values small. Do not add new states such as `validated`, `proven`, or `invalid` just to express confidence. Put the evidence in the record body instead.

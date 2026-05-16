@@ -3,7 +3,7 @@
 ## Active Summary
 
 - archived: 6
-- observing: 12
+- observing: 13
 - reviewed: 6
 
 ## Active Changes
@@ -20,6 +20,7 @@
 - `brief-active-observation-limit` - [changes/2026-05-11-brief-active-observation-limit.md](changes/2026-05-11-brief-active-observation-limit.md)
 - `habitat-validation-command-metadata` - [changes/2026-05-13-habitat-validation-command-metadata.md](changes/2026-05-13-habitat-validation-command-metadata.md)
 - `ai-agent-adoption-guide` - [changes/2026-05-15-ai-agent-adoption-guide.md](changes/2026-05-15-ai-agent-adoption-guide.md)
+- `external-use-intake-automation` - [changes/2026-05-16-external-use-intake-automation.md](changes/2026-05-16-external-use-intake-automation.md)
 
 ## Review Due
 
