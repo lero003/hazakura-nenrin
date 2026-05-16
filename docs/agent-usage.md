@@ -99,6 +99,12 @@ enough to influence the next command. Treat those as evidence about record
 pressure and pruning behavior, not as a reason for Nenrin automation to edit
 the mobile app.
 
+For `hazakura-llm-manager`, useful read-only signals include SwiftPM
+verification guidance, restricted-environment flags, local endpoint/runtime
+command boundaries, and whether the app stays within its server-control-panel
+scope. Treat those as evidence about command selection and scope discipline,
+not as a reason for Nenrin automation to edit the manager app.
+
 ## Judgment Rules
 
 Keep status and impact values small. Do not add new states such as `validated`, `proven`, or `invalid` just to express confidence. Put the evidence in the record body instead.

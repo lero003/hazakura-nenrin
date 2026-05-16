@@ -46,7 +46,8 @@ Choose at most one small, verifiable slice in this order:
 1. Overdue review or review-apply work.
 2. Recurring failure verification.
 3. Active-record hygiene or evidence quality.
-4. External-use carry-back from Habitat or `hazakura-ai-mobile`.
+4. External-use carry-back from Habitat, `hazakura-ai-mobile`, or
+   `hazakura-llm-manager`.
 5. Small roadmap or documentation drift discovered during the run.
 6. A narrow CLI, parser, template, or test fix with clear operational value.
 7. No-op when none of the above is actionable.
@@ -56,15 +57,17 @@ clean no-op is successful when the checked signals are quiet.
 
 ## External Use Intake
 
-Habitat and `hazakura-ai-mobile` are read-only evidence sources for Nenrin
-development automation. They are not secondary work targets.
+Habitat, `hazakura-ai-mobile`, and `hazakura-llm-manager` are read-only
+evidence sources for Nenrin development automation. They are not secondary
+work targets.
 
 For external repos, inspect only enough to decide whether a Nenrin-side change
 is warranted:
 
-- repo status
+- repo status, when the observed project is a Git repository
 - relevant automation memory
-- current status or development automation docs
+- `AGENTS.md`, README, current status, product brief, or development automation
+  docs
 - existing Nenrin ledger, if present
 - recent commits
 - Habitat report freshness and command-decision guidance
@@ -77,6 +80,13 @@ Carry back at most one Nenrin-side change: a review decision, observation,
 docs clarification, prompt adjustment, or CLI hygiene fix. If the signal is
 weak or project-specific, report the bounded evidence and leave Nenrin
 unchanged.
+
+For `hazakura-llm-manager`, useful signals include SwiftPM verification
+guidance, restricted-environment flags such as `--disable-sandbox`, local
+endpoint/runtime command boundaries, and non-goals such as no chat UI, no model
+download, and no proxy layer. Treat these as evidence about command selection,
+scope discipline, and record pressure, not as reasons to edit the manager app
+from Nenrin automation.
 
 ## No-Op Gate
 
