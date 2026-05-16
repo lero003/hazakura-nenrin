@@ -10,6 +10,10 @@ If a repository is deciding how much Nenrin to adopt, start with
 [AI Agent Adoption Guide](adoption_guide.md). Use the lowest level that reduces
 future misunderstanding; do not adopt a full ledger just to prove process.
 
+For Nenrin's own recurring development automation, use
+[Hazakura Nenrin Development Loop](development_loop.md) as the operational
+runbook.
+
 ## Minimal Rule
 
 ```md

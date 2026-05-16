@@ -62,6 +62,9 @@ See `examples/nenrin/` for a tiny sample ledger.
 
 See `docs/roadmap.md` for the current direction. The roadmap is intentionally evidence-led: Nenrin should evolve through observed use, not through a large feature checklist.
 
+See `docs/development_loop.md` for the recurring self-development and pruning
+automation runbook used by this repository.
+
 See `docs/integration.md` for guidance on calling Nenrin from a development harness.
 
 See `docs/adoption_guide.md` for choosing the smallest useful adoption level.

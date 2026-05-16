@@ -7,6 +7,7 @@ impact: unknown
 related_files:
   - README.md
   - docs/agent-usage.md
+  - docs/development_loop.md
   - docs/philosophy.md
   - docs/roadmap.md
 review_after:
@@ -22,6 +23,8 @@ review_after:
 - Added no-op as a valid automation outcome when there is no actionable signal.
 - Clarified that `effective` must be backed by behavior evidence, not record creation.
 - Clarified that confidence belongs in review evidence, not extra status values.
+- Added a development-loop runbook so recurring automation has a repo-side
+  source of truth for preflight, decision order, no-op gates, and final reports.
 
 ## Reason
 

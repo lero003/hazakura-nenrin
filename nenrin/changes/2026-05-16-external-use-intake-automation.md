@@ -6,6 +6,7 @@ status: observing
 impact: unknown
 related_files:
   - docs/agent-usage.md
+  - docs/development_loop.md
   - docs/roadmap.md
 review_after:
   tasks: 3
