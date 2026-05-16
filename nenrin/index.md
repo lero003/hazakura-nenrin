@@ -3,8 +3,8 @@
 ## Active Summary
 
 - archived: 6
-- observing: 13
-- reviewed: 5
+- observing: 12
+- reviewed: 6
 
 ## Active Changes
 
@@ -15,7 +15,6 @@
 - `roadmap-drift-doc-sync` - [changes/2026-05-07-roadmap-drift-doc-sync.md](changes/2026-05-07-roadmap-drift-doc-sync.md)
 - `track-ledger-readme-diff` - [changes/2026-05-07-track-ledger-readme-diff.md](changes/2026-05-07-track-ledger-readme-diff.md)
 - `v0-2-release-gate-record-pressure` - [changes/2026-05-08-v0-2-release-gate-record-pressure.md](changes/2026-05-08-v0-2-release-gate-record-pressure.md)
-- `record-shape-debt-warnings` - [changes/2026-05-09-record-shape-debt-warnings.md](changes/2026-05-09-record-shape-debt-warnings.md)
 - `invalid-state-debt-warnings` - [changes/2026-05-10-invalid-state-debt-warnings.md](changes/2026-05-10-invalid-state-debt-warnings.md)
 - `keep-observing-review-window` - [changes/2026-05-10-keep-observing-review-window.md](changes/2026-05-10-keep-observing-review-window.md)
 - `brief-active-observation-limit` - [changes/2026-05-11-brief-active-observation-limit.md](changes/2026-05-11-brief-active-observation-limit.md)

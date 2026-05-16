@@ -2,8 +2,8 @@
 type: nenrin_change
 id: record-shape-debt-warnings
 date: 2026-05-09
-status: observing
-impact: unknown
+status: reviewed
+impact: effective
 related_files:
   - src/nenrin/records.py
   - src/nenrin/cli.py
@@ -48,4 +48,7 @@ hazakura-ai-mobile showed a model decision note under nenrin/changes with frontm
 
 ## Result
 
-Unjudged.
+Reviewed on 2026-05-16 and kept. The warning stayed quiet for Nenrin's own
+ledger while Habitat's embedded ledger surfaced a real untyped frontmatter file
+under `nenrin/changes/`, giving the pruning pass a concrete cleanup target
+instead of another broad scan.
