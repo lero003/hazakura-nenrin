@@ -468,6 +468,45 @@ class RecordTests(unittest.TestCase):
             self.assertEqual(len(warnings), 1)
             self.assertIn("nonstandard impact_judgment `validated`", warnings[0].message)
 
+    def test_record_shape_warnings_for_keep_observing_without_observe_next(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp) / "nenrin"
+            write_record(
+                root / "reviews" / "2026-05-17-review.md",
+                {
+                    "type": "nenrin_review",
+                    "id": "review-boundary",
+                    "date": "2026-05-17",
+                    "related_change": "boundary",
+                    "final_judgment": "keep_observing",
+                },
+                "# Review: boundary\n\n## Observe Next\n\n- TBD\n",
+            )
+
+            warnings = record_shape_warnings(root)
+
+            self.assertEqual(len(warnings), 1)
+            self.assertIn("Observe Next appears empty", warnings[0].message)
+
+    def test_record_shape_warnings_accepts_bounded_keep_observing(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp) / "nenrin"
+            write_record(
+                root / "reviews" / "2026-05-17-review.md",
+                {
+                    "type": "nenrin_review",
+                    "id": "review-boundary",
+                    "date": "2026-05-17",
+                    "related_change": "boundary",
+                    "final_judgment": "keep_observing",
+                },
+                "# Review: boundary\n\n## Observe Next\n\n- Watch the next two release reviews.\n",
+            )
+
+            warnings = record_shape_warnings(root)
+
+            self.assertEqual(warnings, [])
+
     def test_debt_reports_record_shape_warnings(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp) / "nenrin"
@@ -613,6 +652,10 @@ class CliTests(unittest.TestCase):
             self.assertIn("created", output.getvalue())
             review_files = list((root / "reviews").glob("*.md"))
             self.assertEqual(len(review_files), 1)
+            review_text = review_files[0].read_text(encoding="utf-8")
+            self.assertIn("## Still Unknown", review_text)
+            self.assertIn("## Observe Next", review_text)
+            self.assertIn("## Out of Scope", review_text)
 
     def test_cmd_review_create_skips_existing_review(self) -> None:
         with tempfile.TemporaryDirectory() as temp:

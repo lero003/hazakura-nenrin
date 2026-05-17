@@ -18,6 +18,18 @@ Keep observing. The AI-first framing is still useful, but the ledger still shows
 - External feedback and cross-project usage were folded back into release gates and narrow CLI behavior instead of broad feature promises.
 - The ledger still has many `observing` / `unknown` records, so the risk of over-recording remains live.
 
+## Still Unknown
+
+- Whether the AI-usability framing reduces unnecessary records during ordinary work, not only during review-focused slices.
+
+## Observe Next
+
+- In the next real docs or CLI slice, check whether the agent skips routine records and records only behavior-changing guidance.
+
+## Out of Scope
+
+- Do not use this record to justify dashboards, AI judgment, scoring, or broader automation.
+
 ## Decision
 
 - keep_observing

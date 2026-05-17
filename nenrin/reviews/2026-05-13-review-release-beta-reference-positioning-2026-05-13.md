@@ -24,6 +24,18 @@ agent integrations actually keep that boundary.
 - External review agreed the internal documentation evidence is positive but
   not enough to claim external behavior changed.
 
+## Still Unknown
+
+- Whether external readers and integrations preserve the pruning-ledger/reference-implementation boundary without extra explanation.
+
+## Observe Next
+
+- During v0.2.0 release work or first external integration feedback, watch whether Nenrin is described as a pruning ledger rather than task management, release planning, or an AI platform.
+
+## Out of Scope
+
+- Do not turn this review into release planning, publication tracking, or feature-roadmap expansion.
+
 ## Decision
 
 - keep_observing

@@ -136,7 +136,52 @@ def record_shape_warnings(root: Path) -> list[RecordShapeWarning]:
                     )
                 )
 
+        if collection == "reviews" and record_type == "nenrin_review":
+            judgment = str(metadata.get("final_judgment", "")).strip()
+            if judgment == "keep_observing" and not _has_substantive_section_content(_body, "Observe Next"):
+                warnings.append(
+                    RecordShapeWarning(
+                        path=path,
+                        message="review uses final_judgment: keep_observing but Observe Next appears empty",
+                    )
+                )
+
     return warnings
+
+
+def _has_substantive_section_content(body: str, heading: str) -> bool:
+    section_lines = _markdown_section_lines(body, heading)
+    if not section_lines:
+        return False
+
+    placeholders = {"-", "tbd", "- tbd", "todo", "- todo"}
+    for line in section_lines:
+        stripped = line.strip()
+        if not stripped:
+            continue
+        if stripped.lower() in placeholders:
+            continue
+        return True
+    return False
+
+
+def _markdown_section_lines(body: str, heading: str) -> list[str]:
+    target = f"## {heading}".lower()
+    in_section = False
+    lines: list[str] = []
+
+    for line in body.splitlines():
+        stripped = line.strip()
+        if stripped.startswith("#"):
+            if in_section:
+                break
+            if stripped.lower() == target:
+                in_section = True
+            continue
+        if in_section:
+            lines.append(line)
+
+    return lines
 
 
 def changes(records: list[Record]) -> list[Record]:

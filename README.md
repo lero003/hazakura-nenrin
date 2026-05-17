@@ -94,6 +94,13 @@ Create records for durable changes to agent-facing behavior: instructions, skill
 
 Treat `effective` as a behavior claim, not a feeling of progress. Use it when evidence shows a changed next command, a narrower cleanup choice, a safer review path, or a concrete reduction in recurring friction. If the evidence only says a record was read or written, keep the impact unknown or partially effective and write the uncertainty in the review note.
 
+Treat review due items as a judgment queue, not a task queue. A review should
+move an old hypothesis toward keep, remove, merge, narrow, move, or bounded
+observation. `keep_observing` must not be used as an indefinite holding area:
+when a review keeps an entry observing, state what remains unknown and what to
+observe next. Nenrin tracks bounded observation conditions, not tasks, owners,
+priorities, or progress.
+
 ## Commands
 
 Command examples in this README prefer `nenrin` after installation. Agent quick
@@ -166,6 +173,11 @@ success_tags:
 ```
 
 Review records include `final_judgment`. Use `nenrin review --apply` to propagate completed review judgments back to the related change's `status` and `impact`; unsupported values warn and leave the change unchanged.
+
+When `final_judgment` stays `keep_observing`, fill in `Still Unknown`,
+`Observe Next`, and `Out of Scope` so the review records a bounded observation
+condition instead of vague deferral. `nenrin debt` warns when a
+`keep_observing` review leaves `Observe Next` empty or at its placeholder.
 
 ## Tests
 

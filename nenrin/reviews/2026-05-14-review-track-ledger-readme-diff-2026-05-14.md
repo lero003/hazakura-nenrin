@@ -23,6 +23,18 @@ the right record/no-record decision.
 - No observed run yet changed `nenrin/README.md`, so the main success signal is
   still unproven.
 
+## Still Unknown
+
+- Whether agents make the right record/no-record decision when `nenrin/README.md` actually changes.
+
+## Observe Next
+
+- On the next ledger README edit, watch whether the agent consciously creates or skips a related change record based on durable behavior impact.
+
+## Out of Scope
+
+- Do not create records automatically for routine wording churn.
+
 ## Decision
 
 - keep_observing

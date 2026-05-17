@@ -18,6 +18,18 @@ Keep observing. The generated index is useful as navigation, but the evidence is
 - Recent work still used direct search alongside the index, so the original success signal is only partially observed.
 - The index remains short and has not grown into a second ledger summary.
 
+## Still Unknown
+
+- Whether future agents use `nenrin/index.md` as the first navigation surface before falling back to repository search.
+
+## Observe Next
+
+- In the next two Nenrin or Habitat-ledger review tasks, watch whether agents open active records through the generated index before direct filename searches.
+
+## Out of Scope
+
+- Do not expand the index into a full ledger summary, dashboard, or priority list.
+
 ## Decision
 
 - keep_observing

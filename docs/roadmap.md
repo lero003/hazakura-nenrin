@@ -97,6 +97,12 @@ Focus:
 - Keep optional `success_tags` and `failure_tags` useful for recurring signals.
 - Provide a minimal rule that can be pasted into `AGENTS.md` or similar agent instructions.
 - Keep no-failure placeholders out of recurring debt while preserving weak evidence as `unknown` or `partially_effective`.
+- Treat review due items as a judgment queue, not a task queue: reviews should
+  force a pruning judgment or a bounded next observation without adding owners,
+  priorities, progress states, or task breakdown.
+- Keep `keep_observing` lightweight but bounded by review evidence: the review
+  should say what remains unknown, what to observe next, and what is out of
+  scope.
 
 Success means the ledger is used during real work without becoming a chore or a stale checklist.
 
@@ -108,6 +114,8 @@ Release `v0.2.0` only when real use shows that:
 - at least one review decision has been applied or consciously kept observing
 - `keep_observing` reviews narrow what is still being watched instead of
   becoming a place to park vague unfinished work
+- `debt` warns on `keep_observing` reviews that leave `Observe Next` empty,
+  without making that warning a hard schema gate
 - `metrics` and `debt` remain quiet unless there is actionable signal
 - `effective` is used only with behavior evidence
 - Nenrin-related docs changes can happen without creating unnecessary records

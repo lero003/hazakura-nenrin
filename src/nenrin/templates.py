@@ -163,6 +163,18 @@ TBD
 
 - TBD
 
+## Still Unknown
+
+- TBD
+
+## Observe Next
+
+- TBD
+
+## Out of Scope
+
+- TBD
+
 ## Decision
 
 - keep_observing

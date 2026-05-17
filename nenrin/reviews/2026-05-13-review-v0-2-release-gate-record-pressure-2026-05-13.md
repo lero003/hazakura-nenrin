@@ -26,6 +26,18 @@ release preparation.
 - `roadmap-foundation-hardening` was closed as reviewed/effective, improving
   the observing/reviewed balance.
 
+## Still Unknown
+
+- Whether the low-record-pressure posture survives v0.2 release preparation.
+
+## Observe Next
+
+- In the next v0.2 release-prep or release-review slice, watch whether the work prefers no-op, observation, and review evidence over new commands, dashboards, AI assistance, or routine docs-change records.
+
+## Out of Scope
+
+- Do not use this record to create release tasks, owners, priority states, or a broader review workflow.
+
 ## Decision
 
 - keep_observing

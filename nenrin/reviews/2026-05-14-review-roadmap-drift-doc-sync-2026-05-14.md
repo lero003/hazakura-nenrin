@@ -24,6 +24,18 @@ is still mostly Habitat-side and should not be promoted to a completed
 - ai-mobile's current ledger is quiet, which supports no new carry-back rather
   than broadening the docs rule.
 
+## Still Unknown
+
+- Whether non-Habitat Nenrin self-use will repeatedly expose implementation-driven docs drift that deserves same-slice cleanup.
+
+## Observe Next
+
+- In the next implementation slice that discovers docs drift, watch whether the fix updates only the directly affected source-of-truth doc.
+
+## Out of Scope
+
+- Do not use this record to justify speculative roadmap rewrites or broad docs gardening.
+
 ## Decision
 
 - keep_observing
