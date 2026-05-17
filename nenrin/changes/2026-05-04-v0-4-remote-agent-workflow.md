@@ -59,4 +59,4 @@ review_after:
 
 ## Result
 
-Unjudged.
+Reviewed via `review-v0-4-remote-agent-workflow-service-close`. Judgment: `remove`.

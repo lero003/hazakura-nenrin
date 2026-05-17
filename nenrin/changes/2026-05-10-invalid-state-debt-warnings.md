@@ -2,8 +2,8 @@
 type: nenrin_change
 id: invalid-state-debt-warnings
 date: 2026-05-10
-status: observing
-impact: unknown
+status: reviewed
+impact: effective
 related_files:
   - src/nenrin/records.py
   - tests/test_nenrin.py
@@ -50,4 +50,4 @@ hazakura-ai-mobile now exposes a typed change record with status active; metrics
 
 ## Result
 
-Unjudged.
+Reviewed via `review-invalid-state-debt-warnings-2026-05-18`. Judgment: `keep`.

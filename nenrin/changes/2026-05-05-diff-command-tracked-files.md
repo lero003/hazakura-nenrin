@@ -46,4 +46,4 @@ v0.5 diff awareness needs a small manual omission check before any automated rec
 
 ## Result
 
-Reviewed on 2026-05-06 and kept. Two follow-up tasks used this record to choose narrow diff-awareness fixes, and both fixes preserved the command's read-only boundary.
+Reviewed via `review-diff-command-tracked-files-2026-05-06`. Judgment: `keep`.

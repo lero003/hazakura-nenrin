@@ -1,5 +1,5 @@
 project_name: hazakura-nenrin
-nenrin_version: 0.1
+config_schema: 1
 
 tracked_files:
   - AGENTS.md

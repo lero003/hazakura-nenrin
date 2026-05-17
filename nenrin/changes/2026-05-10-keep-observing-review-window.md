@@ -2,8 +2,8 @@
 type: nenrin_change
 id: keep-observing-review-window
 date: 2026-05-10
-status: observing
-impact: unknown
+status: reviewed
+impact: effective
 related_files:
   - src/nenrin/records.py
   - tests/test_nenrin.py
@@ -53,4 +53,4 @@ The v0.2 release gate allows a review decision to be applied or consciously kept
 
 ## Result
 
-Unjudged.
+Reviewed via `review-keep-observing-review-window-2026-05-18`. Judgment: `keep`.

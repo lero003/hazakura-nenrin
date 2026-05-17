@@ -46,9 +46,8 @@ command override repo-local validation truth by itself.
 
 Goal: present a low-friction pruning-ledger model as a usable reference implementation.
 
-Status: `v0.1.0-beta.1` is published as an immutable prerelease. Current `main`
-uses the development version `0.2.0.dev2` while the next low-friction operation
-cycle is exercised.
+Status: `v0.1.0-beta.1` is published as an immutable prerelease. `v0.2.0` is
+the current low-friction operation release.
 
 Current scope:
 
@@ -77,6 +76,8 @@ Success means:
 ## v0.2 - Low-Friction Operation
 
 Goal: make the ledger easy for humans and coding agents to use without over-recording.
+
+Status: `v0.2.0` is the current release.
 
 This is an operation release, not a feature-count release. The central question
 is whether teams can record less, observe later, and prune with confidence. A

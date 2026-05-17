@@ -48,7 +48,4 @@ hazakura-ai-mobile showed a model decision note under nenrin/changes with frontm
 
 ## Result
 
-Reviewed on 2026-05-16 and kept. The warning stayed quiet for Nenrin's own
-ledger while Habitat's embedded ledger surfaced a real untyped frontmatter file
-under `nenrin/changes/`, giving the pruning pass a concrete cleanup target
-instead of another broad scan.
+Reviewed via `review-record-shape-debt-warnings-2026-05-16`. Judgment: `keep`.

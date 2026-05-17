@@ -5,9 +5,12 @@ date: 2026-05-08
 status: observing
 impact: unknown
 related_files:
+  - README.md
   - docs/roadmap.md
   - docs/agent-usage.md
   - docs/integration.md
+  - docs/release-checklist.md
+  - nenrin/README.md
 review_after:
   tasks: 3
   days: 7

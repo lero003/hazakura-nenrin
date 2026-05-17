@@ -67,4 +67,4 @@ review_after:
 
 ## Result
 
-Unjudged.
+Reviewed via `review-v0-3-x-stabilization-service-close`. Judgment: `remove`.

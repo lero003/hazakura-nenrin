@@ -6,9 +6,9 @@
 
 Hazakura Nenrin is a small pruning ledger for development judgment.
 
-The latest published release is `v0.1.0-beta.1`. The `main` branch currently
-reports `0.2.0.dev2` while post-beta low-friction operation work is being
-exercised.
+The latest published release is `v0.2.0`, the low-friction operation release.
+The earlier `v0.1.0-beta.1` prerelease remains available as the pruning-ledger
+reference beta.
 
 It helps humans and agents:
 
@@ -37,7 +37,26 @@ Nenrin is not:
 
 Its value comes from recording less, not more: decisions, concerns, and hypotheses that may matter later, plus the evidence needed to keep, remove, merge, narrow, or move them.
 
-## Quick Start
+## Smallest Useful Path
+
+Start lower than you think.
+
+1. If the repository has no recurring agent-facing workflow changes, do not
+   adopt Nenrin yet.
+2. If a small rule would prevent future misunderstanding, paste the minimal
+   rule from [AI Agent Adoption Guide](docs/adoption_guide.md) into
+   `AGENTS.md`, `CLAUDE.md`, or a harness prompt.
+3. Run `nenrin init` only when durable agent-facing guidance changes over time
+   and later review would be useful.
+
+Normal use should stay selective: run `nenrin brief` before work only when
+prior decisions or unresolved concerns may affect the task, and run `nenrin
+diff`, `nenrin debt`, or `nenrin review` after work only to decide whether
+there is a durable behavior signal. Create no record for tiny wording changes,
+implementation-only work, one-off notes, or quiet review/debt/diff output. A
+clean no-op is a successful Nenrin outcome.
+
+## Quick Start Smoke
 
 ```bash
 python3 -m pip install -e .
@@ -45,7 +64,7 @@ nenrin init
 nenrin change release-review-checklist
 nenrin observe v0-3-release-review --change release-review-checklist
 nenrin brief
-nenrin metrics
+nenrin metrics --no-write
 nenrin debt
 nenrin review
 nenrin diff
@@ -54,7 +73,9 @@ nenrin diff
 The quick start installs the editable package first, so later examples use the
 short `nenrin` command. When working from a fresh checkout without installing,
 use `uv run nenrin <command>` instead. Minimal Python environments can also use
-`PYTHONPATH=src python3 -m nenrin <command>`.
+`PYTHONPATH=src python3 -m nenrin <command>`. `nenrin diff` inspects Git
+working-tree changes, so run the smoke inside a Git checkout or temporary Git
+repository.
 
 All records are Markdown files under `nenrin/` with YAML-like frontmatter that humans and coding agents can both read.
 
@@ -124,7 +145,9 @@ All commands accept `--root <path>` to point to a non-default ledger directory (
 
 `nenrin change` and `nenrin observe` intentionally create editable Markdown templates instead of forcing a heavy questionnaire. The first version optimizes for Codex, Claude Code, Cursor, Windsurf, and similar tools that can fill in records directly.
 
-`nenrin review` lists overdue changes. `--create` generates review templates for each overdue change. `--apply` propagates completed review judgments to related change records.
+`nenrin review` lists overdue changes. `--create` generates review templates
+for each overdue change. `--apply` propagates completed review judgments to
+related change records and updates their `## Result` section.
 
 `nenrin brief` prints review deadlines, recurring failures, and active observation context for the next agent session without requiring the agent to read every record. It shows up to 20 active observation records by default so large ledgers keep review and failure signals near the top; use `nenrin brief --active-limit 0` to show all active observations.
 
@@ -134,11 +157,17 @@ All commands accept `--root <path>` to point to a non-default ledger directory (
 
 ## Configuration
 
-`nenrin init` creates `nenrin/config.yaml` with defaults. The `review_defaults.tasks` and `review_defaults.days` values are used as fallback defaults for `nenrin change` when `--review-tasks` and `--review-days` are not specified on the command line.
+`nenrin init` creates `nenrin/config.yaml` with defaults. The `config_schema`
+value identifies the config shape, not the installed Nenrin package version.
+The `review_defaults.tasks` and `review_defaults.days` values are used as
+fallback defaults for `nenrin change` when `--review-tasks` and
+`--review-days` are not specified on the command line.
 
 `nenrin observe --change <id>` warns when a referenced change ID does not exist in the ledger, helping catch orphan observations before they accumulate.
 
-`nenrin review --apply` reads completed review records and updates the related change's `status` and `impact` based on the `final_judgment`:
+`nenrin review --apply` reads completed review records and updates the related
+change's `status`, `impact`, and `## Result` section based on the
+`final_judgment`:
 
 | Judgment | Change status | Change impact |
 |----------|--------------|---------------|
@@ -172,7 +201,10 @@ success_tags:
 ---
 ```
 
-Review records include `final_judgment`. Use `nenrin review --apply` to propagate completed review judgments back to the related change's `status` and `impact`; unsupported values warn and leave the change unchanged.
+Review records include `final_judgment`. Use `nenrin review --apply` to
+propagate completed review judgments back to the related change's `status`,
+`impact`, and `## Result` section; unsupported values warn and leave the
+change unchanged.
 
 When `final_judgment` stays `keep_observing`, fill in `Still Unknown`,
 `Observe Next`, and `Out of Scope` so the review records a bounded observation

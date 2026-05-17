@@ -221,7 +221,7 @@ def cmd_review(args: argparse.Namespace) -> int:
         existing_review_targets = {
             str(record.metadata.get("related_change", ""))
             for record in records
-            if record.type == "nenrin_review"
+            if record.type == "nenrin_review" and str(record.metadata.get("date", "")) == today.isoformat()
         }
         created = False
         for item in overdue:
@@ -399,11 +399,17 @@ def _apply_reviews(root: Path) -> int:
         change = change_matches[0]
         text = change.path.read_text(encoding="utf-8")
         metadata, body = parse_frontmatter(text)
-        if metadata.get("status") == mapping["status"] and metadata.get("impact") == mapping["impact"]:
+        updated_body = _replace_markdown_section(
+            body,
+            "Result",
+            f"Reviewed via `{review.id}`. Judgment: `{judgment}`.",
+        )
+        metadata_matches = metadata.get("status") == mapping["status"] and metadata.get("impact") == mapping["impact"]
+        if metadata_matches and updated_body == body:
             continue
         metadata["status"] = mapping["status"]
         metadata["impact"] = mapping["impact"]
-        change.path.write_text(dump_frontmatter(metadata, body), encoding="utf-8")
+        change.path.write_text(dump_frontmatter(metadata, updated_body), encoding="utf-8")
         print(f"{judgment} → {related_change_id} (status={mapping['status']}, impact={mapping['impact']})")
         applied += 1
 
@@ -414,6 +420,25 @@ def _apply_reviews(root: Path) -> int:
     else:
         print("No review judgments to apply.")
     return 0
+
+
+def _replace_markdown_section(body: str, heading: str, content: str) -> str:
+    lines = body.rstrip("\n").splitlines()
+    target = f"## {heading}"
+    replacement = [target, "", content]
+
+    for index, line in enumerate(lines):
+        if line.strip() != target:
+            continue
+
+        end = index + 1
+        while end < len(lines) and not lines[end].startswith("## "):
+            end += 1
+        return "\n".join(lines[:index] + replacement + lines[end:]).rstrip() + "\n"
+
+    if lines:
+        return "\n".join(lines + ["", *replacement]).rstrip() + "\n"
+    return "\n".join(replacement).rstrip() + "\n"
 
 
 def cmd_brief(args: argparse.Namespace) -> int:

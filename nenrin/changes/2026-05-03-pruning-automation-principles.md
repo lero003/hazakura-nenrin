@@ -2,8 +2,8 @@
 type: nenrin_change
 id: pruning-automation-principles
 date: 2026-05-03
-status: observing
-impact: unknown
+status: reviewed
+impact: effective
 related_files:
   - README.md
   - docs/agent-usage.md
@@ -56,4 +56,4 @@ Habitat self-use and follow-up review showed that Nenrin becomes useful when obs
 
 ## Result
 
-Unjudged.
+Reviewed via `review-pruning-automation-principles-2026-05-18`. Judgment: `keep`.

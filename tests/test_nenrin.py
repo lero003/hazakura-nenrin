@@ -5,7 +5,7 @@ import sys
 import tempfile
 import unittest
 from contextlib import redirect_stderr, redirect_stdout
-from datetime import date
+from datetime import date, timedelta
 from pathlib import Path
 
 from nenrin.cli import build_parser, main, render_diff, tracked_file_matches, git_changed_paths
@@ -592,6 +592,7 @@ class CliTests(unittest.TestCase):
                 "  - nenrin/README.md",
                 (root / "config.yaml").read_text(encoding="utf-8"),
             )
+            self.assertIn("config_schema: 1", (root / "config.yaml").read_text(encoding="utf-8"))
 
             self.assertEqual(main(["--root", str(root), "change", "Release Review"]), 0)
             change_files = list((root / "changes").glob("*.md"))
@@ -679,6 +680,39 @@ class CliTests(unittest.TestCase):
             self.assertIn("No overdue changes.", output.getvalue())
             review_files = list((root / "reviews").glob("*.md"))
             self.assertEqual(len(review_files), 1)
+
+    def test_cmd_review_create_allows_new_review_after_old_keep_observing_review(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp) / "nenrin"
+
+            self.assertEqual(main(["--root", str(root), "init"]), 0)
+            main(["--root", str(root), "change", "Old Review", "--review-days", "1", "--review-tasks", "1"])
+            change_files = sorted((root / "changes").glob("*.md"))
+            change_text = change_files[0].read_text(encoding="utf-8")
+            change_id_start = change_text.index("id: ") + 4
+            change_id_end = change_text.index("\n", change_id_start)
+            change_id = change_text[change_id_start:change_id_end].strip()
+            old_review_date = (date.today() - timedelta(days=2)).isoformat()
+
+            write_record(
+                root / "reviews" / f"{old_review_date}-review-old-review.md",
+                {
+                    "type": "nenrin_review",
+                    "id": "review-old-review",
+                    "date": old_review_date,
+                    "related_change": change_id,
+                    "final_judgment": "keep_observing",
+                },
+                "# Review\n\n## Observe Next\n\n- Watch the next slice.\n",
+            )
+
+            output = io.StringIO()
+            with redirect_stdout(output):
+                self.assertEqual(main(["--root", str(root), "review", "--create"]), 0)
+
+            self.assertIn("created", output.getvalue())
+            review_files = sorted((root / "reviews").glob("*.md"))
+            self.assertEqual(len(review_files), 2)
 
     def test_observe_warns_orphan_change(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
@@ -850,6 +884,9 @@ class CliTests(unittest.TestCase):
             updated_text = change_files[0].read_text(encoding="utf-8")
             self.assertIn("status: reviewed", updated_text)
             self.assertIn("impact: effective", updated_text)
+            self.assertIn("Reviewed via `review-applytest-", updated_text)
+            self.assertIn("Judgment: `keep`.", updated_text)
+            self.assertNotIn("Unjudged.", updated_text)
             metrics_text = (root / "metrics.md").read_text(encoding="utf-8")
             self.assertIn("- reviewed: 1", metrics_text)
             self.assertIn("- effective: 1", metrics_text)
@@ -903,6 +940,18 @@ class CliTests(unittest.TestCase):
             review_files[0].write_text(review_text.replace("keep_observing", "keep"), encoding="utf-8")
 
             self.assertEqual(main(["--root", str(root), "review", "--apply"]), 0)
+
+            change_files[0].write_text(
+                change_files[0].read_text(encoding="utf-8").replace("Judgment: `keep`.", "Unjudged."),
+                encoding="utf-8",
+            )
+
+            output = io.StringIO()
+            with redirect_stdout(output):
+                self.assertEqual(main(["--root", str(root), "review", "--apply"]), 0)
+
+            self.assertIn("keep \u2192 already-applied", output.getvalue())
+            self.assertIn("Judgment: `keep`.", change_files[0].read_text(encoding="utf-8"))
 
             output = io.StringIO()
             with redirect_stdout(output):

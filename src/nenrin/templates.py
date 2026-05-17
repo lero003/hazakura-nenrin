@@ -7,7 +7,7 @@ from .frontmatter import dump_frontmatter
 
 
 DEFAULT_CONFIG = """project_name: hazakura-nenrin
-nenrin_version: 0.1
+config_schema: 1
 
 tracked_files:
   - AGENTS.md
@@ -216,7 +216,7 @@ Observation records may include optional `success_tags` and `failure_tags` to re
 
 ## Review Flow
 
-Review records include `final_judgment`. Run `nenrin review --apply` to propagate completed review judgments back to the related change's `status` and `impact`; unsupported values warn and leave the change unchanged.
+Review records include `final_judgment`. Run `nenrin review --apply` to propagate completed review judgments back to the related change's `status`, `impact`, and `## Result` section; unsupported values warn and leave the change unchanged.
 """
 
 

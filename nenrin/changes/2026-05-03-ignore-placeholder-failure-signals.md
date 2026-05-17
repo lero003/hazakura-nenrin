@@ -46,4 +46,4 @@ Habitat's ledger accumulated enough observations for review, but `nenrin debt` t
 
 ## Result
 
-Reviewed effective on 2026-05-10.
+Reviewed via `review-ignore-placeholder-failure-signals-2026-05-10`. Judgment: `keep`.

@@ -44,4 +44,4 @@ review_after:
 
 ## Result
 
-Unjudged.
+Reviewed via `review-v0-5-compaction-summary-decisions-service-close`. Judgment: `remove`.

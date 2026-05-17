@@ -2,8 +2,8 @@
 type: nenrin_change
 id: roadmap-ai-usable-from-start
 date: 2026-05-03
-status: observing
-impact: unknown
+status: reviewed
+impact: effective
 related_files:
   - README.md
   - docs/roadmap.md
@@ -51,4 +51,4 @@ AI usability needs to be an initial constraint, not a late AI-assistance feature
 
 ## Result
 
-Unjudged.
+Reviewed via `review-roadmap-ai-usable-from-start-2026-05-18`. Judgment: `keep`.

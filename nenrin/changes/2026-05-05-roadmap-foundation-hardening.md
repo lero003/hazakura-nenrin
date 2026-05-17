@@ -42,7 +42,4 @@ External review identified config.yaml and frontmatter correctness as blockers f
 
 ## Result
 
-Reviewed on 2026-05-13 and kept. The record changed later development order in
-the intended direction: foundation work landed before broader briefing, diff,
-or assisted-reflection expansion. Remaining output-boundary risk is now covered
-by the normal v0.2 release gates instead of this record staying open.
+Reviewed via `review-roadmap-foundation-hardening-2026-05-13`. Judgment: `keep`.
