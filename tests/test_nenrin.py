@@ -291,6 +291,7 @@ class RecordTests(unittest.TestCase):
             root = Path(temp) / "nenrin"
             placeholders = [
                 "None observed in this slice.",
+                "None in this run.",
                 "None in this task.",
                 "No failure signals observed yet.",
             ]

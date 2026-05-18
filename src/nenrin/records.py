@@ -16,6 +16,7 @@ _PLACEHOLDER_FAILURE_SIGNALS = {
     "none",
     "none observed",
     "none observed in this slice",
+    "none in this run",
     "none in this task",
     "no failure signals observed",
     "no failure signals observed yet",
